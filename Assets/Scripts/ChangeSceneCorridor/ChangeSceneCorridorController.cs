@@ -1,0 +1,89 @@
+using System.Collections;
+using Unity.VisualScripting;
+using UnityEditor.Toolbars;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class ChangeSceneCorridorController : MonoBehaviour
+{
+    [SerializeField] private string levelNameToLoadAfterPlayerEnter;
+    [SerializeField] private Transform playerStartTransform;
+
+    [Header("Doors animations")]
+    [SerializeField] private Animator doorsAnimatorController;
+    [SerializeField] private AnimationClip openDoorAnimation;
+    [SerializeField] private AnimationClip closeDoorAnimation;
+    [SerializeField] private float extraTimeBeforeLoadingNextLevel = 2;
+
+    [Header("Trigger Control")]
+    [SerializeField] private GameObject changeSceneTrigger;
+    [SerializeField] private float timeToActivateTriggerAfterLoadingScene;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        StartCoroutine(EnterSceneLogic());
+    }
+
+    #region ENTERING SCENE
+    [ContextMenu("Enter Scene Logic")]
+    private IEnumerator EnterSceneLogic()
+    {
+        yield return new WaitForSeconds(openDoorAnimation.length + extraTimeBeforeLoadingNextLevel);
+
+        //Door opening
+        doorsAnimatorController.SetTrigger("OpenDoor");
+        //TODO - Door SFX
+
+        //Coroutine to enable trigger to load next level. Disabled at the beggining to avoid player trigger at the very beggining of scene
+        StartCoroutine(EnableTriggerAfterAFewSecondsAfterLoadingScene());
+    }
+
+    #endregion
+
+    #region EXITING SCENE
+    [ContextMenu("Load Next Level")]
+    public void LoadNextLevel()
+    {
+        StartCoroutine(LoadNextLevelLogic());
+    }
+
+    private IEnumerator LoadNextLevelLogic()
+    {
+        //Trigger deactivation to avoid multiple hits
+        changeSceneTrigger.SetActive(false);
+
+        //Door close and wait
+        doorsAnimatorController.SetTrigger("CloseDoor");
+        //TODO - Door SFX
+        yield return new WaitForSeconds(closeDoorAnimation.length + extraTimeBeforeLoadingNextLevel);
+
+        //TODO - Send information to game controller to locate player in the correct "change scene corridor" and rotation
+
+        //Scene load
+        SceneManager.LoadSceneAsync(levelNameToLoadAfterPlayerEnter);
+        //SceneManager.LoadScene(levelNameToLoadAfterPlayerEnter);
+    }
+    #endregion
+
+
+
+
+    #region MISC
+    private IEnumerator EnableTriggerAfterAFewSecondsAfterLoadingScene()
+    {
+        changeSceneTrigger.SetActive(false);
+        yield return new WaitForSeconds(timeToActivateTriggerAfterLoadingScene);
+        changeSceneTrigger.SetActive(true);
+    }
+
+    /// <summary>
+    /// Player start transform when he goes to another scene through corridor in case we want him to start in this corridor
+    /// </summary>
+    /// <returns></returns>
+    public Transform GetPlayerStartInCorridorTransform()
+    {
+        return playerStartTransform;
+    }
+    #endregion
+}
