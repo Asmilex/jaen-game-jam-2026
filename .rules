@@ -1,1 +1,15 @@
-This is a modern unity project.
+# Description of the project
+
+This is a modern Unity project dedicated to a game jam. 
+
+It is a puzzle game, with first person controls, in which you need to solve misteries in a room in order to advance to the next level.
+
+The main mechanic of the game is based on swpaping off masks which the player can wear. These masks change the perspective of the player — functionally speaking, both its vision as well as its physicallity are moved to a different layer. Objects from different layers are unable to interact among themselves. Thus, when wearing the blue mask, the main character is only able to see blue cubes, and press blue buttons.
+
+# Technical details
+
+Lean towards modern C# features, such as the nullity check operator, terciary operators.
+
+Make sure to maintain common C# conventions, as long as they comply with Unity.
+
+Prefer pattern matching.
