@@ -5,30 +5,37 @@ using UnityEngine;
 
 namespace NetworkMask.Mask
 {
+    [RequireComponent(typeof(MeshRenderer))]
     [RequireComponent(typeof(Collider))]
     public abstract class ColoredObject: MonoBehaviour
     {
         public abstract MaskColor MaskColor { get; }
+        private MeshRenderer _renderer;
         private Collider _maskCollider;
-        private static LayerMask BaseCollitionLayer = LayerMask.GetMask(CollitionLayerName.BaseLayer, CollitionLayerName.PlayerLayer);
 
         void Start()
         {
+            _renderer = GetComponent<MeshRenderer>();
             _maskCollider = GetComponent<Collider>();
             GameController.OnMaskChange += OnColorChange;
+            _renderer.renderingLayerMask = RenderingLayerMask.GetMask(RenderLayerConverters.GetRenderLayerNameFromColor(MaskColor));
         }
 
         void OnColorChange(GameObject sender, MaskChangeEventArgs args)
         {
-            if (sender != gameObject) return;
-
-            if (args.NewColor == MaskColor)
+            var mask = CollitionLayerConverters.GetCollitionLayerNameFromColor(MaskColor);
+            if (args.NewColor != MaskColor || string.IsNullOrEmpty(mask))
             {
-                _maskCollider.includeLayers = BaseCollitionLayer | LayerMask.GetMask(CollitionLayerConverters.GetCollitionLayerNameFromColor(MaskColor));
+                _maskCollider.includeLayers = BaseLayer.CollitionBaseLayer;
             }
-            else
+            _maskCollider.includeLayers = BaseLayer.CollitionBaseLayer | LayerMask.GetMask(mask);
+        }
+
+        public void ChangeMaterial(Material newMaterial)
+        {
+            if (_renderer != null && newMaterial != null)
             {
-                _maskCollider.includeLayers = BaseCollitionLayer;
+                _renderer.material = newMaterial;
             }
         }
 

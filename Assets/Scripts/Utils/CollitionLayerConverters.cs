@@ -14,11 +14,6 @@ namespace NetworkMask.Utils
                 MaskColor.Green => CollitionLayerName.GreenLayer,
                 _ => string.Empty
             };
-
-            if (string.IsNullOrEmpty(result))
-            {
-                Debug.LogError($"No collition layer name found for color {color}");
-            }
             return result;
         }
     }

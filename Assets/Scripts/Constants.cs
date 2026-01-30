@@ -1,7 +1,10 @@
+using UnityEngine;
+
 namespace NetworkMask.Constants
 {
     public enum MaskColor
     {
+        None = 0,
         Red = 8,
         Blue = 9,
         Green = 10
@@ -42,5 +45,18 @@ namespace NetworkMask.Constants
         GreenMaskLayer = 3,
         Animations = 4,
     }
+
+    public static class RenderMaterialName
+    {
+        public const string RedColorMaterial = "RedColorMaterial";
+        public const string BlueColorMaterial = "BlueColorMaterial";
+        public const string GreenColorMaterial = "GreenColorMaterial";
+    }
     
+    public static class BaseLayer
+    {
+        public static LayerMask CollitionBaseLayer = LayerMask.GetMask(CollitionLayerName.BaseLayer, CollitionLayerName.PlayerLayer);
+        public static LayerMask CullingBaseLayer = LayerMask.GetMask(RenderMaskLayerName.DefaultMaskLayer);
+        public static RenderingLayerMask renderingLayerMask = RenderingLayerMask.GetMask(RenderMaskLayerName.DefaultMaskLayer);
+    }
 }

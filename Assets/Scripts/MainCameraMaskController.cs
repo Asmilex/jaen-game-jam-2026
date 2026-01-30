@@ -1,9 +1,9 @@
+using NetworkMask.Constants;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 public class MainCameraMaskController : MonoBehaviour
 {
-    private static LayerMask DefaultMaskLayer = LayerMask.GetMask(NetworkMask.Constants.RenderMaskLayerName.DefaultMaskLayer);
     private Camera _mainCamera;
 
     void Start()
@@ -17,10 +17,10 @@ public class MainCameraMaskController : MonoBehaviour
 
         _mainCamera.cullingMask = args.NewColor switch
         {
-            NetworkMask.Constants.MaskColor.Red => DefaultMaskLayer | LayerMask.GetMask(NetworkMask.Constants.RenderMaskLayerName.RedMaskLayer),
-            NetworkMask.Constants.MaskColor.Blue => DefaultMaskLayer | LayerMask.GetMask(NetworkMask.Constants.RenderMaskLayerName.BlueMaskLayer),
-            NetworkMask.Constants.MaskColor.Green => DefaultMaskLayer | LayerMask.GetMask(NetworkMask.Constants.RenderMaskLayerName.GreenMaskLayer),
-            _ => (int)DefaultMaskLayer,
+            MaskColor.Red => BaseLayer.CullingBaseLayer | LayerMask.GetMask(RenderMaskLayerName.RedMaskLayer),
+            MaskColor.Blue => BaseLayer.CullingBaseLayer | LayerMask.GetMask(RenderMaskLayerName.BlueMaskLayer),
+            MaskColor.Green => BaseLayer.CullingBaseLayer | LayerMask.GetMask(RenderMaskLayerName.GreenMaskLayer),
+            _ => BaseLayer.CullingBaseLayer,
         };
     }
 }
