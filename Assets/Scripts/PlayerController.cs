@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterController))]
@@ -13,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpHeight = 1.6f;
     [SerializeField] float deceleration = 25f;
     [SerializeField] float cameraSensibility = 20f;    
+    [SerializeField] int coyoteMiliseconds = 20;
     public Camera playerCamera;
 
     Vector3 _currentSpeed;
@@ -22,7 +24,10 @@ public class PlayerController : MonoBehaviour
     Vector3 _currentCameraSpeed;
     float _cameraPitch;
     float _playerYaw;
+    bool _sprinting = false;
 
+    bool _coyoteGrounded = true;
+    float _airSeconds = 0;
     PlayerInput _inputs;
     CharacterController _controller;
     Transform _playerPosition;
@@ -43,6 +48,12 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         if (!_initialiced) Initialize();
+        Cursor.visible = false; 
+        // Locks the cursor
+        Cursor.lockState = CursorLockMode.Locked;
+
+        // Confines the cursor
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     public void OnEnable() {
@@ -69,7 +80,9 @@ public class PlayerController : MonoBehaviour
                 break;
             case "Look":
                 _cameraMovement = context.ReadValue<Vector2>();
-                Debug.Log(_cameraMovement);
+                break;
+            case "Sprint":
+                _sprinting = context.ReadValueAsButton();
                 break;
         }
     }
@@ -85,20 +98,43 @@ public class PlayerController : MonoBehaviour
     private void PlayerMovement()
     {
         Vector3 desiredLocal = new Vector3(_movement.x, 0f, _movement.z);
-        desiredLocal = desiredLocal.normalized * maxSpeed;
+        desiredLocal = desiredLocal.normalized * (_sprinting ? maxSpeed*3f : maxSpeed);
+
 
         Vector3 desiredWorld = _playerPosition.TransformDirection(desiredLocal); 
 
-        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? acceleration : deceleration;
+        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (_sprinting ? acceleration * 3f : acceleration) : deceleration;
         _currentSpeed = Vector3.MoveTowards(_currentSpeed, desiredWorld, accel * Time.deltaTime);
 
-        // Jump + gravedad
-        if (_controller.isGrounded)
+        if (!_controller.isGrounded && _airSeconds > coyoteMiliseconds && _coyoteGrounded)
         {
-            _verticalSpeed = -1f; // mantiene pegado al suelo
-            if (_movement.y == 1)
-                _verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            _coyoteGrounded = false;   
+            Debug.Log($"End Coyote Time | {_coyoteGrounded}");
+        } else if (!_controller.isGrounded && _airSeconds < coyoteMiliseconds)
+        {
+            _airSeconds += Time.deltaTime*1000;
+            Debug.Log($"Coyote Time entered - {_airSeconds}|{coyoteMiliseconds} - {_coyoteGrounded}");
+        } else if (_controller.isGrounded && _airSeconds != 0)
+        {
+            _coyoteGrounded = true;
+            _airSeconds = 0;
+            Debug.Log($"Grounded | {_coyoteGrounded}");
         }
+
+        // Jump + gravedad
+        if (_coyoteGrounded)
+        {
+            if (_controller.isGrounded)_verticalSpeed = -1f; 
+            else _verticalSpeed = 0;// mantiene pegado al suelo
+            if (_movement.y == 1) 
+            {
+                Debug.Log("Jumping");
+                _verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                _coyoteGrounded = false;
+            }
+        }
+
+        
         _verticalSpeed += gravity * Time.deltaTime;
         _movement.y = 0;
         _currentSpeed.y = _verticalSpeed;
@@ -108,7 +144,7 @@ public class PlayerController : MonoBehaviour
 
     private void CameraMovement()
     {
-        _cameraPitch = Mathf.Clamp(_cameraPitch + _cameraMovement.y * cameraSensibility * Time.deltaTime, -70f, 70f);
+        _cameraPitch = Mathf.Clamp(_cameraPitch + _cameraMovement.y * cameraSensibility * Time.deltaTime, -80f, 85f);
         _playerYaw += _cameraMovement.x * cameraSensibility * Time.deltaTime;
 
         playerCamera.transform.localRotation = Quaternion.Euler(_cameraPitch* -1, 0f, 0f);
