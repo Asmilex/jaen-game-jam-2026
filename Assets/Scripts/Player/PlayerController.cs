@@ -39,7 +39,9 @@ public class PlayerController : MonoBehaviour
     bool[] _masksEnabled;
     LayerMask _currentLayer;
 
-    Rigidbody _holdingObject; 
+    GameObject _holdingObject;
+    Collider _holdingObjectCollider;
+    Rigidbody _holdingObjectBody; 
     //----------------------------------//
 
     PlayerInput _inputs;
@@ -276,16 +278,19 @@ public class PlayerController : MonoBehaviour
             try
             {
                 var interactable = hitted.collider.gameObject.GetComponent<Interactable>();
-                if (interactable) Grab(hitted.rigidbody);
+                if (interactable) Grab(hitted);
             } catch{}
         }
     }
 
-    private void Grab(Rigidbody interactableObject)
+    private void Grab(RaycastHit interactableObject)
     {
-        _holdingObject = interactableObject;
-        _holdingObject.useGravity = false;
-        _holdingObject.freezeRotation = true;
+        _holdingObject = interactableObject.rigidbody.gameObject;
+        _holdingObjectBody = interactableObject.rigidbody;
+        _holdingObjectBody.useGravity = false;
+        _holdingObjectBody.freezeRotation = true;
+        _holdingObjectCollider = interactableObject.rigidbody.gameObject.GetComponent<Collider>();
+        _holdingObjectCollider.enabled = false;
     }
 
     private void Grabing()
@@ -294,18 +299,31 @@ public class PlayerController : MonoBehaviour
         Vector3 targetPos = grabReference.transform.position;
         Vector3 camPos = playerCamera.transform.position;
         float dist = Vector3.Distance(camPos, targetPos);
-
+        
         if (dist < minGrabingDistance)
         {
             targetPos = camPos + playerCamera.transform.forward.normalized * minGrabingDistance;
         }
+        Vector3 movement = (targetPos-_holdingObject.transform.position).normalized;
 
-        _holdingObject.transform.position = targetPos;
+        RaycastHit hit;
+        if (Physics.BoxCast(playerCamera.transform.position, _holdingObject.transform.lossyScale/2, playerCamera.transform.forward, out hit, playerCamera.transform.rotation, minGrabingDistance, LayerMask.GetMask(CollitionLayerName.BaseLayer)))
+        {
+            float distance = Mathf.Max(new float[]{Vector3.Distance(_holdingObject.transform.position, targetPos)-2f,0});
+            while (Physics.BoxCast(playerCamera.transform.position, _holdingObject.transform.lossyScale/2, playerCamera.transform.forward, out hit, playerCamera.transform.rotation, minGrabingDistance, LayerMask.GetMask(CollitionLayerName.BaseLayer)) && distance > 0);
+            {
+                targetPos = _holdingObject.transform.position + (movement*(distance));
+                distance = Mathf.Max(new float[]{Vector3.Distance(_holdingObject.transform.position, targetPos)-2f,0});
+                Debug.Log(distance);
+            } 
+        }
+        _holdingObjectBody.position = targetPos;
     }
     private void DropObject()
     {
-        _holdingObject.useGravity = true;
-        _holdingObject.freezeRotation = false;
+        _holdingObjectBody.useGravity = true;
+        _holdingObjectBody.freezeRotation = false;
+        _holdingObjectCollider.enabled = true;
         _holdingObject = null;
     }
 }
