@@ -1,9 +1,7 @@
 using System;
 using NetworkMask.Constants;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterController))]
@@ -17,7 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpHeight = 1.6f;
     [SerializeField] float deceleration = 25f;
     [SerializeField] float sprintFactor = 2f;
-    [SerializeField] float cameraSensibility = 20f;    
+    [SerializeField] float cameraSensibility = 20f;
     [SerializeField] int coyoteMiliseconds = 20;
     [SerializeField] float interactionDistance = 2f;
     [SerializeField] float normalFOV = 60f;
@@ -46,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
     GameObject _holdingObject;
     Collider _holdingObjectCollider;
-    Rigidbody _holdingObjectBody; 
+    Rigidbody _holdingObjectBody;
     //----------------------------------//
 
     PlayerInput _inputs;
@@ -60,9 +58,9 @@ public class PlayerController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _playerPosition = GetComponent<Transform>();
         _masksEnabled = new bool[] { true, true, true };
-        _movement = new Vector3(0f,0f,0f);
+        _movement = new Vector3(0f, 0f, 0f);
         _holdingObject = null;
-        if (_inputs == null) throw new NullReferenceException("No player input found");  
+        if (_inputs == null) throw new NullReferenceException("No player input found");
         if (playerCamera == null) throw new NullReferenceException("No player camera found");
         if (grabReference == null) throw new NullReferenceException("No grab reference found");
         ChangeMask(MaskColor.None);
@@ -73,7 +71,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         if (!_initialiced) Initialize();
-        Cursor.visible = false; 
+        Cursor.visible = false;
         // Locks the cursor
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -85,18 +83,21 @@ public class PlayerController : MonoBehaviour
         _targetFOV = normalFOV;
     }
 
-    public void OnEnable() {
+    public void OnEnable()
+    {
         if (!_initialiced) Initialize();
         // subscribe to the event
         _inputs.onActionTriggered += HandleInput;
     }
 
-    public void OnDisable() {
+    public void OnDisable()
+    {
         // unsubscribe to avoid memory leaks
         _inputs.onActionTriggered -= HandleInput;
     }
 
-    private void HandleInput(InputAction.CallbackContext context) {
+    private void HandleInput(InputAction.CallbackContext context)
+    {
         switch (context.action.name)
         {
             case "Move":
@@ -119,9 +120,10 @@ public class PlayerController : MonoBehaviour
             case "BlueMask":
                 if (_currentMask != MaskColor.Blue && _masksEnabled[0])
                 {
-                Debug.Log("BlueMask Action");
+                    Debug.Log("BlueMask Action");
                     _currentMask = MaskColor.Blue;
-                } else
+                }
+                else
                 {
                     Debug.Log("Out Mask");
                     _currentMask = MaskColor.None;
@@ -131,9 +133,10 @@ public class PlayerController : MonoBehaviour
             case "RedMask":
                 if (_currentMask != MaskColor.Red && _masksEnabled[1])
                 {
-                Debug.Log("RedMask Action");
+                    Debug.Log("RedMask Action");
                     _currentMask = MaskColor.Red;
-                } else
+                }
+                else
                 {
                     _currentMask = MaskColor.None;
                 }
@@ -142,9 +145,10 @@ public class PlayerController : MonoBehaviour
             case "YellowMask":
                 if (_currentMask != MaskColor.Yellow && _masksEnabled[2])
                 {
-                Debug.Log("YellowMask Action");
+                    Debug.Log("YellowMask Action");
                     _currentMask = MaskColor.Yellow;
-                } else
+                }
+                else
                 {
                     _currentMask = MaskColor.None;
                 }
@@ -166,21 +170,23 @@ public class PlayerController : MonoBehaviour
     private void PlayerMovement()
     {
         Vector3 desiredLocal = new Vector3(_movement.x, 0f, _movement.z);
-        desiredLocal = desiredLocal.normalized * (_sprinting ? maxSpeed*sprintFactor : maxSpeed);
+        desiredLocal = desiredLocal.normalized * (_sprinting ? maxSpeed * sprintFactor : maxSpeed);
 
 
-        Vector3 desiredWorld = _playerPosition.TransformDirection(desiredLocal); 
+        Vector3 desiredWorld = _playerPosition.TransformDirection(desiredLocal);
 
         float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (_sprinting ? acceleration * sprintFactor : acceleration) : deceleration;
         _currentSpeed = Vector3.MoveTowards(_currentSpeed, desiredWorld, accel * Time.deltaTime);
 
         if (!_controller.isGrounded && _airSeconds > coyoteMiliseconds && _coyoteGrounded)
         {
-            _coyoteGrounded = false;   
-        } else if (!_controller.isGrounded && _airSeconds < coyoteMiliseconds)
+            _coyoteGrounded = false;
+        }
+        else if (!_controller.isGrounded && _airSeconds < coyoteMiliseconds)
         {
-            _airSeconds += Time.deltaTime*1000;
-        } else if (_controller.isGrounded && _airSeconds != 0)
+            _airSeconds += Time.deltaTime * 1000;
+        }
+        else if (_controller.isGrounded && _airSeconds != 0)
         {
             _coyoteGrounded = true;
             _airSeconds = 0;
@@ -189,16 +195,16 @@ public class PlayerController : MonoBehaviour
         // Jump + gravedad
         if (_coyoteGrounded)
         {
-            if (_controller.isGrounded)_verticalSpeed = -1f; 
+            if (_controller.isGrounded) _verticalSpeed = -1f;
             else _verticalSpeed = 0;// mantiene pegado al suelo
-            if (_movement.y == 1) 
+            if (_movement.y == 1)
             {
                 _verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 _coyoteGrounded = false;
             }
         }
 
-        
+
         _verticalSpeed += gravity * Time.deltaTime;
         _movement.y = 0;
         _currentSpeed.y = _verticalSpeed;
@@ -211,7 +217,7 @@ public class PlayerController : MonoBehaviour
         _cameraPitch = Mathf.Clamp(_cameraPitch + _cameraMovement.y * cameraSensibility * Time.deltaTime, -80f, 85f);
         _playerYaw += _cameraMovement.x * cameraSensibility * Time.deltaTime;
 
-        playerCamera.transform.localRotation = Quaternion.Euler(_cameraPitch* -1, 0f, 0f);
+        playerCamera.transform.localRotation = Quaternion.Euler(_cameraPitch * -1, 0f, 0f);
         _playerPosition.localRotation = Quaternion.Euler(0f, _playerYaw, 0f);
     }
 
@@ -236,7 +242,7 @@ public class PlayerController : MonoBehaviour
             case MaskColor.Yellow:
                 _masksEnabled[2] = true;
                 break;
-        }        
+        }
     }
 
     public void DisablePlayerMask(MaskColor mask)
@@ -252,7 +258,7 @@ public class PlayerController : MonoBehaviour
             case MaskColor.Yellow:
                 _masksEnabled[2] = false;
                 break;
-        }  
+        }
     }
 
     private void ChangeMask(MaskColor mask)
@@ -260,26 +266,26 @@ public class PlayerController : MonoBehaviour
         switch (mask)
         {
             case MaskColor.None:
-                _controller.excludeLayers = LayerMask.GetMask(new string[] {CollitionLayerName.BlueLayer, CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer});
-                _currentLayer = LayerMask.GetMask(new string[] {CollitionLayerName.BaseLayer});
+                _controller.excludeLayers = LayerMask.GetMask(new string[] { CollitionLayerName.BlueLayer, CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer });
+                _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer });
                 break;
             case MaskColor.Blue:
-                _controller.excludeLayers = LayerMask.GetMask(new string[] {CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer});
-                _currentLayer = LayerMask.GetMask(new string[] {CollitionLayerName.BaseLayer, CollitionLayerName.BlueLayer});
+                _controller.excludeLayers = LayerMask.GetMask(new string[] { CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer });
+                _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer, CollitionLayerName.BlueLayer });
                 break;
             case MaskColor.Red:
-                _controller.excludeLayers = LayerMask.GetMask(new string[] {CollitionLayerName.BlueLayer, CollitionLayerName.YellowLayer});
-                _currentLayer = LayerMask.GetMask(new string[] {CollitionLayerName.BaseLayer, CollitionLayerName.RedLayer});
+                _controller.excludeLayers = LayerMask.GetMask(new string[] { CollitionLayerName.BlueLayer, CollitionLayerName.YellowLayer });
+                _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer, CollitionLayerName.RedLayer });
                 break;
             case MaskColor.Yellow:
-                _controller.excludeLayers = LayerMask.GetMask(new string[] {CollitionLayerName.BlueLayer, CollitionLayerName.RedLayer});
-                _currentLayer = LayerMask.GetMask(new string[] {CollitionLayerName.BaseLayer, CollitionLayerName.YellowLayer});
+                _controller.excludeLayers = LayerMask.GetMask(new string[] { CollitionLayerName.BlueLayer, CollitionLayerName.RedLayer });
+                _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer, CollitionLayerName.YellowLayer });
                 break;
         }
         GameController.ChangeMask(this.gameObject, mask);
     }
 
-    private void Interact ()
+    private void Interact()
     {
         if (_holdingObject != null)
         {
@@ -289,13 +295,14 @@ public class PlayerController : MonoBehaviour
 
         RaycastHit hitted;
         bool collided = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hitted, interactionDistance, _currentLayer, QueryTriggerInteraction.Ignore);
-        if (collided) 
+        if (collided)
         {
             try
             {
                 var interactable = hitted.collider.gameObject.GetComponent<Interactable>();
                 if (interactable) Grab(hitted);
-            } catch{}
+            }
+            catch { }
         }
     }
 
@@ -315,16 +322,16 @@ public class PlayerController : MonoBehaviour
     {
         if (!_holdingObject) return;
         // Debug.Log(CameraUtils.IsVisibleByCamera(_holdingObject, playerCamera,false, _currentLayer));
-        if (!CameraUtils.IsVisibleByCamera(_holdingObject, playerCamera,false, _currentLayer))
+        if (!CameraUtils.IsVisibleByCamera(_holdingObject, playerCamera, false, _currentLayer))
         {
-            DropObject();  
+            DropObject();
             return;
-        } 
+        }
 
         Vector3 targetPos = grabReference.transform.position;
         Vector3 camPos = playerCamera.transform.position;
         float dist = Vector3.Distance(camPos, targetPos);
-        
+
         if (dist < minGrabingDistance)
         {
             targetPos = camPos + playerCamera.transform.forward.normalized * minGrabingDistance;
@@ -333,7 +340,7 @@ public class PlayerController : MonoBehaviour
         // Check for collisions between camera and target position using current layer
         Vector3 directionToTarget = (targetPos - camPos).normalized;
         float distanceToTarget = Vector3.Distance(camPos, targetPos);
-        
+
         // Raycast with current layer to detect walls/obstacles
         if (Physics.Raycast(camPos, directionToTarget, out RaycastHit hit, distanceToTarget, _currentLayer, QueryTriggerInteraction.Ignore))
         {
@@ -349,7 +356,7 @@ public class PlayerController : MonoBehaviour
         // Check if object position would be inside a collider using box overlap
         Vector3 boxHalfExtents = _holdingObject.transform.lossyScale / 2f;
         Collider[] collidersAtPosition = Physics.OverlapBox(targetPos, boxHalfExtents, _holdingObject.transform.rotation, _currentLayer, QueryTriggerInteraction.Ignore);
-        
+
         // If overlapping with a collider, don't move the object (keep previous position)
         bool isOverlapping = false;
         foreach (Collider col in collidersAtPosition)
@@ -360,7 +367,7 @@ public class PlayerController : MonoBehaviour
                 break;
             }
         }
-        
+
         if (!isOverlapping)
         {
             _holdingObjectBody.position = targetPos;
