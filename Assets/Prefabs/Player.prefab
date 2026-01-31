@@ -165,12 +165,15 @@ MonoBehaviour:
   maxSpeed: 4
   acceleration: 20
   jumpHeight: 1.6
-  deceleration: 40
-  sprintFactor: 1.6
-  cameraSensibility: 10
-  coyoteMiliseconds: 20
-  interactionDistance: 2
-  minGrabingDistance: 5
+  deceleration: 25
+  sprintFactor: 2
+  cameraSensibility: 300
+  coyoteMiliseconds: 100
+  interactionDistance: 3
+  normalFOV: 75
+  sprintFOV: 86
+  fovTransitionSpeed: 4
+  minGrabingDistance: 2
   playerCamera: {fileID: 4538562590462997429}
   grabReference: {fileID: 2368408634552973641}
 --- !u!1 &2368408634552973641
