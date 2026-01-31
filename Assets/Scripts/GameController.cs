@@ -19,7 +19,8 @@ public class GameController : MonoBehaviour
     private const string Door01NamePrefix = "Door_";
     public delegate void MaskChangeHandler(GameObject sender, MaskChangeEventArgs args);
     public static event MaskChangeHandler OnMaskChange;
-    private static byte LastDoorIndex = 0;
+    private static byte _lastDoorIndex = 0;
+    public static byte LastDoorIndex => _lastDoorIndex;
     private static GameObject Player;
 
     public static void ChangeMask(GameObject sender, MaskColor newColor)
@@ -58,13 +59,13 @@ public class GameController : MonoBehaviour
         //Scene load
         await SceneManager.LoadSceneAsync(nextLevel);
 
-        LastDoorIndex = doorIndex;
+        _lastDoorIndex = doorIndex;
         MovePlayerToDoor(doorIndex, spawnPosition);
     }
 
     public static void ResetPlayer()
     {
-        MovePlayerToDoor(LastDoorIndex);
+        MovePlayerToDoor(_lastDoorIndex);
     }
 
     private static void MovePlayerToDoor(byte doorIndex, Vector3 spawnPosition = default)

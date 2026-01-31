@@ -10,21 +10,22 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float gravity = -25f;
+    [SerializeField] float gravity = -30f;
     // [SerializeField] float maxCameraSpeed = 15f;
-    [SerializeField] float maxSpeed = 6f;
+    [SerializeField] float maxSpeed = 4f;
+    [SerializeField] float sprintMaxSpeed = 8f;
     float _realMaxSpeed;
     [SerializeField] float acceleration = 20f;
     [SerializeField] float jumpHeight = 1.6f;
-    [SerializeField] float deceleration = 25f;
+    [SerializeField] float deceleration = 35f;
     [SerializeField] float sprintFactor = 2f;
-    [SerializeField] float cameraSensibility = 20f;
-    [SerializeField] int coyoteMiliseconds = 20;
-    [SerializeField] float interactionDistance = 2f;
-    [SerializeField] float normalFOV = 60f;
-    [SerializeField] float sprintFOV = 65f;
-    [SerializeField] float fovTransitionSpeed = 3f;
-    [SerializeField] float minGrabingDistance = 5f;
+    [SerializeField] float cameraSensibility = 100f;
+    [SerializeField] int coyoteMiliseconds = 100;
+    [SerializeField] float interactionDistance = 3f;
+    [SerializeField] float normalFOV = 75f;
+    [SerializeField] float sprintFOV = 86f;
+    [SerializeField] float fovTransitionSpeed = 4f;
+    [SerializeField] float minGrabingDistance = 3f;
     public Camera playerCamera;
     public GameObject grabReference;
 
@@ -71,7 +72,7 @@ public class PlayerController : MonoBehaviour
         if (grabReference == null) throw new NullReferenceException("No grab reference found");
         _maskAnimation = playerCamera.GetComponentInChildren<ChangeMaskAnimationController>();
         if (_maskAnimation == null) throw new NullReferenceException("Animation not foud");
-        ChangeMask(MaskColor.None);
+        StartCoroutine(ChangeMask(MaskColor.None));
         _initialiced = true;
     }
 
@@ -120,7 +121,8 @@ public class PlayerController : MonoBehaviour
                 _cameraMovement = context.ReadValue<Vector2>();
                 break;
             case "Sprint":
-                _sprinting = context.ReadValueAsButton();
+                var tempSprint = context.ReadValueAsButton();
+                if (_coyoteGrounded || !tempSprint) _sprinting = tempSprint;
                 break;
             case "Interact":
                 if (context.ReadValueAsButton()) Interact();
@@ -167,7 +169,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 desiredWorld = _playerPosition.TransformDirection(desiredLocal);
 
-        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (_sprinting ? acceleration * sprintFactor : acceleration) : (_coyoteGrounded ? deceleration : 0);
+        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (_sprinting ? acceleration * sprintFactor : acceleration) : (_coyoteGrounded ? deceleration : deceleration - 25f);
         _currentSpeed = Vector3.MoveTowards(_currentSpeed, desiredWorld, accel * Time.deltaTime);
 
         if (!_controller.isGrounded && _airSeconds > coyoteMiliseconds && _coyoteGrounded)
