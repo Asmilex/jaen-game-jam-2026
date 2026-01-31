@@ -2,11 +2,12 @@ using NetworkMask.Constants;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AdaptivePerformance;
+using UnityEngine.UI;
 
 public class GrabbableMaskObject : MonoBehaviour
 {
     private PlayerController playerController;
-    
+
     [Header("Mask type")]
     [SerializeField] private GrabbableMaskColor maskColor;
     enum GrabbableMaskColor
@@ -20,6 +21,7 @@ public class GrabbableMaskObject : MonoBehaviour
     [SerializeField] private MeshRenderer maskAnimMeshRenderer;
     [SerializeField] private Light maskPointLight;
     [SerializeField] private Collider maskCollider;
+    [SerializeField] private ParticleSystem maskParticleSystem;
     [SerializeField] private Color maskPointLightColorBlue;
     [SerializeField] private Color maskPointLightColorRed;
     [SerializeField] private Color maskPointLightColorYellow;
@@ -28,8 +30,6 @@ public class GrabbableMaskObject : MonoBehaviour
     [SerializeField] private Material RedMaterial;
     [SerializeField] private Material BlueMaterial;
     [SerializeField] private Material YellowMaterial;
-
-    
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -45,14 +45,20 @@ public class GrabbableMaskObject : MonoBehaviour
             case GrabbableMaskColor.BlueMask:
                 maskAnimMeshRenderer.material = BlueMaterial;
                 maskPointLight.color = maskPointLightColorBlue;
+                var mainModuleBlue = maskParticleSystem.main;
+                mainModuleBlue.startColor = maskPointLightColorBlue;
                 break;
             case GrabbableMaskColor.RedMask:
                 maskAnimMeshRenderer.material = RedMaterial;
                 maskPointLight.color = maskPointLightColorRed;
+                var mainModuleRed = maskParticleSystem.main;
+                mainModuleRed.startColor = maskPointLightColorRed;
                 break;
             case GrabbableMaskColor.YellowMask:
                 maskAnimMeshRenderer.material = YellowMaterial;
                 maskPointLight.color = maskPointLightColorYellow;
+                var mainModuleYellow = maskParticleSystem.main;
+                mainModuleYellow.startColor = maskPointLightColorYellow;
                 break;
 
         }
