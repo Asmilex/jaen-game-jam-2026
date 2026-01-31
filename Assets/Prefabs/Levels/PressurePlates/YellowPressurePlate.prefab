@@ -930,7 +930,7 @@ GameObject:
   - component: {fileID: 7323110523025749682}
   - component: {fileID: 1012662006593199288}
   - component: {fileID: 3356974176771266364}
-  - component: {fileID: 8677583844846276003}
+  - component: {fileID: 6699564352293929187}
   m_Layer: 0
   m_Name: Plate
   m_TagString: Untagged
@@ -1343,7 +1343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fdb078fd2e72cda7a5dc53e3ddd4184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Activate
---- !u!114 &8677583844846276003
+--- !u!114 &6699564352293929187
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1352,6 +1352,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1758445819862879478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a0d804434e1d72cf8d81b5ae54bfc6a, type: 3}
+  m_Script: {fileID: 11500000, guid: 23eec4bab777b0dafb72f386e7d06fce, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BlueMaskObject
+  m_EditorClassIdentifier: Assembly-CSharp::YellowMaskObject
