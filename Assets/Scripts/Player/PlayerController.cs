@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
     bool _initialiced = false;
     ChangeMaskAnimationController _maskAnimation;
     bool _changeOnGoing = false;
-
+    bool _wasSprintingBeforeJumping = false;
 
 
     void Initialize()
@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
         }
 
         bool shouldSprint = _sprinting && _coyoteGrounded;
-        bool mantainSpeed = _sprinting || !_coyoteGrounded;
+        bool mantainSpeed = (_wasSprintingBeforeJumping && !_coyoteGrounded) || shouldSprint;
         Vector3 desiredLocal = new Vector3(_movement.x, 0f, _movement.z);
         desiredLocal = desiredLocal.normalized * (mantainSpeed ? _realMaxSpeed : maxSpeed);
         Debug.Log(_currentSpeed.magnitude);
@@ -219,6 +219,7 @@ public class PlayerController : MonoBehaviour
             {
                 _verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 _coyoteGrounded = false;
+                _wasSprintingBeforeJumping = _sprinting;
             }
         }
         else
