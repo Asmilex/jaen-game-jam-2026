@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 3665607402012479572}
   - component: {fileID: 4442151100426587652}
   - component: {fileID: 3442811964249115425}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Door_Fixed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -393,7 +393,31 @@ MonoBehaviour:
   - {x: -1, y: 0, z: 0, w: -1}
   - {x: -1, y: 0, z: 0, w: -1}
   - {x: -1, y: 0, z: 0, w: -1}
-  m_Colors: []
+  m_Colors:
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
   m_UnwrapParameters:
     m_HardAngle: 88
     m_PackMargin: 20
@@ -402,7 +426,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3248
+  m_VersionIndex: 3269
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -524,7 +548,7 @@ GameObject:
   - component: {fileID: 4890809221026616201}
   - component: {fileID: 9093186263872455930}
   - component: {fileID: 1179260372283898326}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CorridorBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -700,7 +724,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1644
+  m_VersionIndex: 1659
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -767,7 +791,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -822,7 +846,7 @@ GameObject:
   - component: {fileID: 3413222783444097647}
   - component: {fileID: 8720203657954648213}
   - component: {fileID: 2833447849680387241}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Door_Movable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1047,7 +1071,31 @@ MonoBehaviour:
   - {x: -1, y: 0, z: 0, w: -1}
   - {x: -1, y: 0, z: 0, w: -1}
   - {x: -1, y: 0, z: 0, w: -1}
-  m_Colors: []
+  m_Colors:
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
+  - {r: 0.094412796, g: 0.094412796, b: 0.094412796, a: 1}
   m_UnwrapParameters:
     m_HardAngle: 88
     m_PackMargin: 20
@@ -1056,7 +1104,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3248
+  m_VersionIndex: 3272
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
