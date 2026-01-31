@@ -1634,7 +1634,7 @@ GameObject:
   - component: {fileID: 281239253}
   - component: {fileID: 281239252}
   - component: {fileID: 281239251}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LevelStructure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12894,6 +12894,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 135628746}
+    - target: {fileID: 2749777011600198732, guid: ca062eb9a4bf9bbc287bea7f1a128c66, type: 3}
+      propertyPath: m_VersionIndex
+      value: 269
+      objectReference: {fileID: 0}
     - target: {fileID: 4139542909165634128, guid: ca062eb9a4bf9bbc287bea7f1a128c66, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -12902,6 +12906,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 956406907}
+    - target: {fileID: 5866443760983418979, guid: ca062eb9a4bf9bbc287bea7f1a128c66, type: 3}
+      propertyPath: m_VersionIndex
+      value: 301
+      objectReference: {fileID: 0}
     - target: {fileID: 6713770041527819579, guid: ca062eb9a4bf9bbc287bea7f1a128c66, type: 3}
       propertyPath: m_Mesh
       value: 
