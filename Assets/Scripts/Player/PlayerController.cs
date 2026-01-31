@@ -285,7 +285,7 @@ public class PlayerController : MonoBehaviour
                 _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer, CollitionLayerName.YellowLayer });
                 break;
         }
-        DropObject();
+        if (_holdingObject != null) DropObject();
         GameController.ChangeMask(this.gameObject, mask);
     }
 

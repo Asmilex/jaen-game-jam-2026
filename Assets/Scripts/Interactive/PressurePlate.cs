@@ -36,7 +36,7 @@ namespace NetworkMask.Interactive
         {
             _ElementCount++;
             var otherColor = other.GetComponent<ColoredObject>()?.MaskColor ?? MaskColor.None;
-            if (otherColor != PlateColor)
+            if (otherColor != PlateColor && !other.CompareTag("Player"))
             {
                 return;
             }
@@ -55,7 +55,7 @@ namespace NetworkMask.Interactive
         {
             _ElementCount = (ushort)Mathf.Max(0, _ElementCount - 1);
             var otherColor = other.GetComponent<ColoredObject>()?.MaskColor ?? MaskColor.None;
-            if (otherColor != PlateColor)
+            if (otherColor != PlateColor && !other.CompareTag("Player"))
             {
                 return;
             }
