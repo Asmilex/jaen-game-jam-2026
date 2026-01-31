@@ -1,4 +1,5 @@
 using System;
+using NetworkMask.Constants;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour
     float _cameraPitch;
     float _playerYaw;
     bool _sprinting = false;
+    MaskColor _currentMask;
 
     bool _coyoteGrounded = true;
     float _airSeconds = 0;
@@ -83,6 +85,36 @@ public class PlayerController : MonoBehaviour
                 break;
             case "Sprint":
                 _sprinting = context.ReadValueAsButton();
+                break;
+            case "BlueMask":
+                if (_currentMask != MaskColor.Blue)
+                {
+                    _currentMask = MaskColor.Blue;
+                } else
+                {
+                    _currentMask = MaskColor.None;
+                }
+                GameController.ChangeMask(this.gameObject, _currentMask);
+                break;
+            case "RedMask":
+                if (_currentMask != MaskColor.Red)
+                {
+                    _currentMask = MaskColor.Red;
+                } else
+                {
+                    _currentMask = MaskColor.None;
+                }
+                GameController.ChangeMask(this.gameObject, _currentMask);
+                break;
+            case "GreenMask":
+                if (_currentMask != MaskColor.Green)
+                {
+                    _currentMask = MaskColor.Green;
+                } else
+                {
+                    _currentMask = MaskColor.None;
+                }
+                GameController.ChangeMask(this.gameObject, _currentMask);
                 break;
         }
     }
