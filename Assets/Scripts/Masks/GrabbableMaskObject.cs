@@ -94,6 +94,7 @@ public class GrabbableMaskObject : MonoBehaviour
         maskAnimMeshRenderer.enabled = false;
         maskPointLight.enabled = false;
         maskCollider.enabled = false;
+        maskParticleSystem.Stop();
 
     }
 
