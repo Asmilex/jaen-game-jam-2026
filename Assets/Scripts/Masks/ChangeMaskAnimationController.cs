@@ -48,6 +48,6 @@ public class ChangeMaskAnimationController : MonoBehaviour
     /// <returns></returns>
     public float ChangeMaskTransitionAnimationLenght()
     {
-        return changeMaskAnimation.length;
+        return changeMaskAnimation.length - 0.3f;
     }
 }
