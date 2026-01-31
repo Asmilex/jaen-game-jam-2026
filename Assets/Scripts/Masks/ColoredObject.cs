@@ -12,6 +12,7 @@ namespace NetworkMask.Mask
         public abstract MaskColor MaskColor { get; }
         private MeshRenderer _renderer;
         private Collider _maskCollider;
+        private LayerMask _mask;
 
         void Start()
         {
@@ -19,24 +20,20 @@ namespace NetworkMask.Mask
             _maskCollider = GetComponent<Collider>();
             GameController.OnMaskChange += OnColorChange;
             _renderer.renderingLayerMask = RenderingLayerMask.GetMask(RenderLayerConverters.GetRenderLayerNameFromColor(MaskColor));
+            _mask = LayerMask.GetMask(CollitionLayerConverters.GetCollitionLayerNameFromColor(MaskColor));
+            _renderer.material = RenderLayerConverters.GetRenderLayerMaterialFromColor(MaskColor);
+            gameObject.layer = CollitionLayerConverters.GetCollitionLayerIndexFromColor(MaskColor);
+            _maskCollider.includeLayers = BaseLayer.CollitionBaseLayer | _mask;
         }
 
         void OnColorChange(GameObject sender, MaskChangeEventArgs args)
         {
-            var mask = CollitionLayerConverters.GetCollitionLayerNameFromColor(MaskColor);
-            if (args.NewColor != MaskColor || string.IsNullOrEmpty(mask))
+            var mask = BaseLayer.CollitionBaseLayer | _mask;
+            if (args.NewColor == MaskColor)
             {
-                _maskCollider.includeLayers = BaseLayer.CollitionBaseLayer;
+                mask = mask | BaseLayer.BasePlayerLayer;
             }
-            _maskCollider.includeLayers = BaseLayer.CollitionBaseLayer | LayerMask.GetMask(mask);
-        }
-
-        public void ChangeMaterial(Material newMaterial)
-        {
-            if (_renderer != null && newMaterial != null)
-            {
-                _renderer.material = newMaterial;
-            }
+            _maskCollider.includeLayers = mask;
         }
 
         void OnDestroy()

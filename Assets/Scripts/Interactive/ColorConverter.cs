@@ -29,6 +29,5 @@ public class ObjectColorConverter: MonoBehaviour
         }
         Destroy(coloredObject);
         other.gameObject.AddComponent(NewColoredMask.GetType());
-        coloredObject.ChangeMaterial(RenderLayerConverters.GetRenderLayerMaterialFromColor(NewColoredMask.MaskColor));
     }
 }

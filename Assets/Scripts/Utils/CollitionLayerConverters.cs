@@ -11,10 +11,22 @@ namespace NetworkMask.Utils
             {
                 MaskColor.Red => CollitionLayerName.RedLayer,
                 MaskColor.Blue => CollitionLayerName.BlueLayer,
-                MaskColor.Green => CollitionLayerName.GreenLayer,
+                MaskColor.Yellow => CollitionLayerName.YellowLayer,
                 _ => string.Empty
             };
             return result;
+        }
+
+        public static int GetCollitionLayerIndexFromColor(MaskColor color)
+        {
+            var result = color switch
+            {
+                MaskColor.Red => CollitionLayer.RedLayer,
+                MaskColor.Blue => CollitionLayer.BlueLayer,
+                MaskColor.Yellow => CollitionLayer.YellowLayer,
+                _ => default
+            };
+            return (int)result;
         }
     }
 }

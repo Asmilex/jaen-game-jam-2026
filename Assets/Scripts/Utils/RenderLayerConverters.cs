@@ -13,7 +13,7 @@ namespace NetworkMask.Utils
             {
                 MaskColor.Red => RenderMaskLayerName.RedMaskLayer,
                 MaskColor.Blue => RenderMaskLayerName.BlueMaskLayer,
-                MaskColor.Green => RenderMaskLayerName.GreenMaskLayer,
+                MaskColor.Yellow => RenderMaskLayerName.YellowMaskLayer,
                 _ => string.Empty
             };
 
@@ -30,7 +30,7 @@ namespace NetworkMask.Utils
             {
                 MaskColor.Red => RenderMaterialName.RedColorMaterial,
                 MaskColor.Blue => RenderMaterialName.BlueColorMaterial,
-                MaskColor.Green => RenderMaterialName.GreenColorMaterial,
+                MaskColor.Yellow => RenderMaterialName.YellowColorMaterial,
                 _ => string.Empty
             };
 
