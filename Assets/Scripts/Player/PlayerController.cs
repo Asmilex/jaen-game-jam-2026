@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float acceleration = 20f;
     [SerializeField] float jumpHeight = 1.6f;
     [SerializeField] float deceleration = 25f;
+    [SerializeField] float sprintFactor = 2f;
     [SerializeField] float cameraSensibility = 20f;    
     [SerializeField] int coyoteMiliseconds = 20;
     [SerializeField] float interactionDistance = 2f;
@@ -153,27 +154,24 @@ public class PlayerController : MonoBehaviour
     private void PlayerMovement()
     {
         Vector3 desiredLocal = new Vector3(_movement.x, 0f, _movement.z);
-        desiredLocal = desiredLocal.normalized * (_sprinting ? maxSpeed*3f : maxSpeed);
+        desiredLocal = desiredLocal.normalized * (_sprinting ? maxSpeed*sprintFactor : maxSpeed);
 
 
         Vector3 desiredWorld = _playerPosition.TransformDirection(desiredLocal); 
 
-        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (_sprinting ? acceleration * 3f : acceleration) : deceleration;
+        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (_sprinting ? acceleration * sprintFactor : acceleration) : deceleration;
         _currentSpeed = Vector3.MoveTowards(_currentSpeed, desiredWorld, accel * Time.deltaTime);
 
         if (!_controller.isGrounded && _airSeconds > coyoteMiliseconds && _coyoteGrounded)
         {
             _coyoteGrounded = false;   
-            Debug.Log($"End Coyote Time | {_coyoteGrounded}");
         } else if (!_controller.isGrounded && _airSeconds < coyoteMiliseconds)
         {
             _airSeconds += Time.deltaTime*1000;
-            Debug.Log($"Coyote Time entered - {_airSeconds}|{coyoteMiliseconds} - {_coyoteGrounded}");
         } else if (_controller.isGrounded && _airSeconds != 0)
         {
             _coyoteGrounded = true;
             _airSeconds = 0;
-            Debug.Log($"Grounded | {_coyoteGrounded}");
         }
 
         // Jump + gravedad
@@ -183,7 +181,6 @@ public class PlayerController : MonoBehaviour
             else _verticalSpeed = 0;// mantiene pegado al suelo
             if (_movement.y == 1) 
             {
-                Debug.Log("Jumping");
                 _verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 _coyoteGrounded = false;
             }
@@ -276,8 +273,6 @@ public class PlayerController : MonoBehaviour
         bool collided = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hitted, interactionDistance, _currentLayer, QueryTriggerInteraction.Ignore);
         if (collided) 
         {
-            Debug.Log("Collided");
-            Debug.Log(hitted.distance);
             try
             {
                 var interactable = hitted.collider.gameObject.GetComponent<Interactable>();
