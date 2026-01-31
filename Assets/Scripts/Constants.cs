@@ -7,7 +7,7 @@ namespace NetworkMask.Constants
         None = 0,
         Red = 8,
         Blue = 9,
-        Green = 10
+        Yellow = 10
     }
 
     public static class CollitionLayerName
@@ -16,7 +16,7 @@ namespace NetworkMask.Constants
         public const string PlayerLayer = "Player";
         public const string RedLayer = "RedMask";
         public const string BlueLayer = "BlueMask";
-        public const string GreenLayer = "GreenMask";
+        public const string YellowLayer = "YellowMask";
     }
 
     public enum CollitionLayer
@@ -25,7 +25,7 @@ namespace NetworkMask.Constants
         PlayerLayer = 7,
         RedLayer = 8,
         BlueLayer = 9,
-        GreenLayer = 10,
+        YellowLayer = 10,
     }
 
     public static class RenderMaskLayerName
@@ -33,7 +33,7 @@ namespace NetworkMask.Constants
         public const string DefaultMaskLayer = "Default";
         public const string RedMaskLayer = "RedMask";
         public const string BlueMaskLayer = "BlueMask";
-        public const string GreenMaskLayer = "GreenMask";
+        public const string YellowMaskLayer = "YellowMask";
         public const string Animations = "Animations";
     }
 
@@ -42,7 +42,7 @@ namespace NetworkMask.Constants
         DefaultMaskLayer = 0,
         RedMaskLayer = 1,
         BlueMaskLayer = 2,
-        GreenMaskLayer = 3,
+        YellowMaskLayer = 3,
         Animations = 4,
     }
 
@@ -50,13 +50,13 @@ namespace NetworkMask.Constants
     {
         public const string RedColorMaterial = "RedColorMaterial";
         public const string BlueColorMaterial = "BlueColorMaterial";
-        public const string GreenColorMaterial = "GreenColorMaterial";
+        public const string YellowColorMaterial = "YellowColorMaterial";
     }
     
     public static class BaseLayer
     {
-        public static LayerMask CollitionBaseLayer = LayerMask.GetMask(CollitionLayerName.BaseLayer, CollitionLayerName.PlayerLayer);
-        public static LayerMask CullingBaseLayer = LayerMask.GetMask(RenderMaskLayerName.DefaultMaskLayer);
+        public static LayerMask CollitionBaseLayer = LayerMask.GetMask(CollitionLayerName.BaseLayer);
+        public static LayerMask BasePlayerLayer = LayerMask.GetMask(CollitionLayerName.BaseLayer, CollitionLayerName.PlayerLayer);
         public static RenderingLayerMask renderingLayerMask = RenderingLayerMask.GetMask(RenderMaskLayerName.DefaultMaskLayer);
     }
 }

@@ -9,7 +9,7 @@ public class ChangeMaskAnimationController : MonoBehaviour
     [Header("Materials")]
     [SerializeField] private Material RedMaterial;
     [SerializeField] private Material BlueMaterial;
-    [SerializeField] private Material GreenMaterial;
+    [SerializeField] private Material YellowMaterial;
 
     [Header("Change mask animator controler")]
     [SerializeField] private Animator changeMaskAnimatorController;
@@ -17,7 +17,7 @@ public class ChangeMaskAnimationController : MonoBehaviour
     
 
     /// <summary>
-    /// Triggers change mask animation (Parameter = 1(red), 2(blue), 3(green))
+    /// Triggers change mask animation (Parameter = 1(red), 2(blue), 3(Yellow))
     /// </summary>
     /// <param name="maskNumber"></param>
     public void ChangeMaskTransition(int maskNumber)
@@ -35,8 +35,8 @@ public class ChangeMaskAnimationController : MonoBehaviour
                 changeMaskAnimatorController.SetTrigger("ChangeMaskAnimation");
                 break;
             case 3:
-                Debug.Log("Trigger transition to green mask");
-                ChangeMaskAnimMeshRenderer.material = GreenMaterial;
+                Debug.Log("Trigger transition to Yellow mask");
+                ChangeMaskAnimMeshRenderer.material = YellowMaterial;
                 changeMaskAnimatorController.SetTrigger("ChangeMaskAnimation");
                 break;
         }

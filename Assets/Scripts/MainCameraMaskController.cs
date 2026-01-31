@@ -10,6 +10,7 @@ public class MainCameraMaskController : MonoBehaviour
     {
         _mainCamera = GetComponent<Camera>();
         GameController.OnMaskChange += OnMaskChange;
+        _mainCamera.cullingMask = BaseLayer.BasePlayerLayer;
     }
 
     void OnMaskChange(GameObject sender, MaskChangeEventArgs args)
@@ -17,10 +18,10 @@ public class MainCameraMaskController : MonoBehaviour
 
         _mainCamera.cullingMask = args.NewColor switch
         {
-            MaskColor.Red => BaseLayer.CullingBaseLayer | LayerMask.GetMask(RenderMaskLayerName.RedMaskLayer),
-            MaskColor.Blue => BaseLayer.CullingBaseLayer | LayerMask.GetMask(RenderMaskLayerName.BlueMaskLayer),
-            MaskColor.Green => BaseLayer.CullingBaseLayer | LayerMask.GetMask(RenderMaskLayerName.GreenMaskLayer),
-            _ => BaseLayer.CullingBaseLayer,
+            MaskColor.Red => BaseLayer.BasePlayerLayer | LayerMask.GetMask(CollitionLayerName.RedLayer),
+            MaskColor.Blue => BaseLayer.BasePlayerLayer | LayerMask.GetMask(CollitionLayerName.BlueLayer),
+            MaskColor.Yellow => BaseLayer.BasePlayerLayer | LayerMask.GetMask(CollitionLayerName.YellowLayer),
+            _ => BaseLayer.BasePlayerLayer,
         };
     }
 }
