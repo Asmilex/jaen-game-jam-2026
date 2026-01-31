@@ -8,6 +8,7 @@ public class ChangeSceneCorridorController : MonoBehaviour
 {
     [SerializeField] private string levelNameToLoadAfterPlayerEnter;
     [SerializeField] private Transform playerStartTransform;
+    [SerializeField] public byte TargetDoorIndex = 1;
 
     [Header("Doors animations")]
     [SerializeField] private Animator doorsAnimatorController;
@@ -58,11 +59,8 @@ public class ChangeSceneCorridorController : MonoBehaviour
         //TODO - Door SFX
         yield return new WaitForSeconds(closeDoorAnimation.length + extraTimeBeforeLoadingNextLevel);
 
-        //TODO - Send information to game controller to locate player in the correct "change scene corridor" and rotation
-
-        //Scene load
-        SceneManager.LoadSceneAsync(levelNameToLoadAfterPlayerEnter);
-        //SceneManager.LoadScene(levelNameToLoadAfterPlayerEnter);
+        //Change scene
+        GameController.ChangeScene(levelNameToLoadAfterPlayerEnter, TargetDoorIndex);
     }
     #endregion
 
