@@ -1,3 +1,4 @@
+using NetworkMask.Constants;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -14,27 +15,27 @@ public class ChangeMaskAnimationController : MonoBehaviour
     [Header("Change mask animator controler")]
     [SerializeField] private Animator changeMaskAnimatorController;
     [SerializeField] private AnimationClip changeMaskAnimation;
-    
+
 
     /// <summary>
     /// Triggers change mask animation (Parameter = 1(red), 2(blue), 3(Yellow))
     /// </summary>
     /// <param name="maskNumber"></param>
-    public void ChangeMaskTransition(int maskNumber)
+    public void ChangeMaskTransition(MaskColor mask)
     {
-        switch (maskNumber)
+        switch (mask)
         {
-            case 1:
+            case MaskColor.Red:
                 Debug.Log("Trigger transition to red mask");
                 ChangeMaskAnimMeshRenderer.material = RedMaterial;
                 changeMaskAnimatorController.SetTrigger("ChangeMaskAnimation");
                 break;
-            case 2:
+            case MaskColor.Blue:
                 Debug.Log("Trigger transition to blue mask");
                 ChangeMaskAnimMeshRenderer.material = BlueMaterial;
                 changeMaskAnimatorController.SetTrigger("ChangeMaskAnimation");
                 break;
-            case 3:
+            case MaskColor.Yellow:
                 Debug.Log("Trigger transition to Yellow mask");
                 ChangeMaskAnimMeshRenderer.material = YellowMaterial;
                 changeMaskAnimatorController.SetTrigger("ChangeMaskAnimation");
@@ -46,8 +47,8 @@ public class ChangeMaskAnimationController : MonoBehaviour
     /// Returns change mask animation lenght in seconds
     /// </summary>
     /// <returns></returns>
-    public float ChangeMaskTransitionAnimationLenght()
+    public float ChangeMaskTransitionAnimationLength()
     {
-        return changeMaskAnimation.length - 0.3f;
+        return changeMaskAnimation.length - 0.0f;
     }
 }

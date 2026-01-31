@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Threading;
 using NetworkMask.Constants;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -51,6 +53,8 @@ public class PlayerController : MonoBehaviour
     CharacterController _controller;
     Transform _playerPosition;
     bool _initialiced = false;
+    ChangeMaskAnimationController _maskAnimation;
+    bool _changeOnGoing = false;
 
     void Initialize()
     {
@@ -63,6 +67,8 @@ public class PlayerController : MonoBehaviour
         if (_inputs == null) throw new NullReferenceException("No player input found");
         if (playerCamera == null) throw new NullReferenceException("No player camera found");
         if (grabReference == null) throw new NullReferenceException("No grab reference found");
+        _maskAnimation = playerCamera.GetComponentInChildren<ChangeMaskAnimationController>();
+        if (_maskAnimation == null) throw new NullReferenceException("Animation not foud");
         ChangeMask(MaskColor.None);
         _initialiced = true;
     }
@@ -123,11 +129,8 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("BlueMask Action");
                     _currentMask = MaskColor.Blue;
                 }
-                else
-                {
-                    Debug.Log("Out Mask");
-                    _currentMask = MaskColor.None;
-                }
+                _maskAnimation.ChangeMaskTransition(_currentMask);
+                StartCoroutine(ChangeMask(MaskColor.Blue));
                 ChangeMask(_currentMask);
                 break;
             case "RedMask":
@@ -136,10 +139,8 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("RedMask Action");
                     _currentMask = MaskColor.Red;
                 }
-                else
-                {
-                    _currentMask = MaskColor.None;
-                }
+                _maskAnimation.ChangeMaskTransition(_currentMask);
+                StartCoroutine(ChangeMask(MaskColor.Red));
                 ChangeMask(_currentMask);
                 break;
             case "YellowMask":
@@ -148,10 +149,8 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("YellowMask Action");
                     _currentMask = MaskColor.Yellow;
                 }
-                else
-                {
-                    _currentMask = MaskColor.None;
-                }
+                _maskAnimation.ChangeMaskTransition(_currentMask);
+                StartCoroutine(ChangeMask(MaskColor.Yellow));
                 ChangeMask(_currentMask);
                 break;
         }
@@ -261,14 +260,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ChangeMask(MaskColor mask)
+    private IEnumerator ChangeMask(MaskColor mask)
     {
+        if (!_changeOnGoing) _changeOnGoing = true;
+        else yield break;
+        yield return new WaitForSeconds(_maskAnimation.ChangeMaskTransitionAnimationLength());
+        _changeOnGoing = false;
         switch (mask)
         {
-            case MaskColor.None:
-                _controller.excludeLayers = LayerMask.GetMask(new string[] { CollitionLayerName.BlueLayer, CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer });
-                _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer });
-                break;
+            // case MaskColor.None:
+            //     _controller.excludeLayers = LayerMask.GetMask(new string[] { CollitionLayerName.BlueLayer, CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer });
+            //     _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer });
+            //     break;
             case MaskColor.Blue:
                 _controller.excludeLayers = LayerMask.GetMask(new string[] { CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer });
                 _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer, CollitionLayerName.BlueLayer });
@@ -282,6 +285,7 @@ public class PlayerController : MonoBehaviour
                 _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer, CollitionLayerName.YellowLayer });
                 break;
         }
+        DropObject();
         GameController.ChangeMask(this.gameObject, mask);
     }
 
