@@ -4,8 +4,9 @@ public class ChangeSceneCorridorTriggerDettection : MonoBehaviour
 {
     [SerializeField] private ChangeSceneCorridorController changeSceneCorridorController;
 
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Interactuado con player");
         changeSceneCorridorController.LoadNextLevel();
     }
 
