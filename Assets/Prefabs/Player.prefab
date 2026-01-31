@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 1885525367786020328}
   - component: {fileID: 7096938100793259927}
   - component: {fileID: 3821387328237449235}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -181,7 +181,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8448387620595545159}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InteractiveReference
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 5767082370518891681}
   - component: {fileID: 730781162150390450}
   - component: {fileID: 5534102695048052504}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
