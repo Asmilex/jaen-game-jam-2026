@@ -20,10 +20,17 @@ public class ChangeSceneCorridorController : MonoBehaviour
     [SerializeField] private GameObject changeSceneTrigger;
     [SerializeField] private float timeToActivateTriggerAfterLoadingScene;
 
+    private bool _allowedToLoadNextLevel = true;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         StartCoroutine(EnterSceneLogic());
+        if (SceneManager.GetSceneByName(levelNameToLoadAfterPlayerEnter) == null)
+        {
+            Debug.LogError("Scene " + levelNameToLoadAfterPlayerEnter + " not found in build settings. Please add it.");
+            _allowedToLoadNextLevel = false;
+        }
     }
 
     #region ENTERING SCENE
@@ -44,12 +51,12 @@ public class ChangeSceneCorridorController : MonoBehaviour
 
     #region EXITING SCENE
     [ContextMenu("Load Next Level")]
-    public void LoadNextLevel()
+    public void LoadNextLevel(Vector3 spawnPosition = default)
     {
-        StartCoroutine(LoadNextLevelLogic());
+        StartCoroutine(LoadNextLevelLogic(spawnPosition));
     }
 
-    private IEnumerator LoadNextLevelLogic()
+    private IEnumerator LoadNextLevelLogic(Vector3 spawnPosition)
     {
         //Trigger deactivation to avoid multiple hits
         changeSceneTrigger.SetActive(false);
@@ -60,7 +67,10 @@ public class ChangeSceneCorridorController : MonoBehaviour
         yield return new WaitForSeconds(closeDoorAnimation.length + extraTimeBeforeLoadingNextLevel);
 
         //Change scene
-        GameController.ChangeScene(levelNameToLoadAfterPlayerEnter, TargetDoorIndex);
+        if (_allowedToLoadNextLevel)
+        {
+            GameController.ChangeScene(levelNameToLoadAfterPlayerEnter, TargetDoorIndex, spawnPosition);
+        }
     }
     #endregion
 
