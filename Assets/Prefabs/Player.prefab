@@ -166,8 +166,9 @@ MonoBehaviour:
   acceleration: 20
   jumpHeight: 1.6
   deceleration: 25
-  cameraSensibility: 100
-  coyoteMiliseconds: 20
+  sprintFactor: 2
+  cameraSensibility: 300
+  coyoteMiliseconds: 100
   interactionDistance: 3
   minGrabingDistance: 2
   playerCamera: {fileID: 4538562590462997429}
