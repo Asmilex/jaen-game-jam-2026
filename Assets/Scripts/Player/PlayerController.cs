@@ -1,8 +1,9 @@
 using System;
 using NetworkMask.Constants;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterController))]
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     float _playerYaw;
     bool _sprinting = false;
     MaskColor _currentMask;
+    bool[] _masksEnabled;
 
     bool _coyoteGrounded = true;
     float _airSeconds = 0;
@@ -40,9 +42,11 @@ public class PlayerController : MonoBehaviour
         _inputs = GetComponent<PlayerInput>();
         _controller = GetComponent<CharacterController>();
         _playerPosition = GetComponent<Transform>();
+        _masksEnabled = new bool[] { true, true, true };
         _movement = new Vector3(0f,0f,0f);
         if (_inputs == null) throw new NullReferenceException("No player input found");  
         if (playerCamera == null) throw new NullReferenceException("No player camera found");
+        GameController.ChangeMask(this.gameObject, MaskColor.None);
         _initialiced = true;
     }
 
@@ -87,34 +91,38 @@ public class PlayerController : MonoBehaviour
                 _sprinting = context.ReadValueAsButton();
                 break;
             case "BlueMask":
-                if (_currentMask != MaskColor.Blue)
+                if (_currentMask != MaskColor.Blue && _masksEnabled[0])
                 {
+                Debug.Log("BlueMask Action");
                     _currentMask = MaskColor.Blue;
                 } else
                 {
+                    Debug.Log("Out Mask");
                     _currentMask = MaskColor.None;
                 }
-                GameController.ChangeMask(this.gameObject, _currentMask);
+                ChangeMask(_currentMask);
                 break;
             case "RedMask":
-                if (_currentMask != MaskColor.Red)
+                if (_currentMask != MaskColor.Red && _masksEnabled[1])
                 {
+                Debug.Log("RedMask Action");
                     _currentMask = MaskColor.Red;
                 } else
                 {
                     _currentMask = MaskColor.None;
                 }
-                GameController.ChangeMask(this.gameObject, _currentMask);
+                ChangeMask(_currentMask);
                 break;
-            case "GreenMask":
-                if (_currentMask != MaskColor.Green)
+            case "YellowMask":
+                if (_currentMask != MaskColor.Yellow && _masksEnabled[2])
                 {
-                    _currentMask = MaskColor.Green;
+                Debug.Log("YellowMask Action");
+                    _currentMask = MaskColor.Yellow;
                 } else
                 {
                     _currentMask = MaskColor.None;
                 }
-                GameController.ChangeMask(this.gameObject, _currentMask);
+                ChangeMask(_currentMask);
                 break;
         }
     }
@@ -181,5 +189,57 @@ public class PlayerController : MonoBehaviour
 
         playerCamera.transform.localRotation = Quaternion.Euler(_cameraPitch* -1, 0f, 0f);
         _playerPosition.localRotation = Quaternion.Euler(0f, _playerYaw, 0f);
+    }
+
+    public void EnablePlayerMask(MaskColor mask)
+    {
+        switch (mask)
+        {
+            case MaskColor.Blue:
+                _masksEnabled[0] = true;
+                break;
+            case MaskColor.Red:
+                _masksEnabled[1] = true;
+                break;
+            case MaskColor.Yellow:
+                _masksEnabled[2] = true;
+                break;
+        }        
+    }
+
+    public void DisablePlayerMask(MaskColor mask)
+    {
+        switch (mask)
+        {
+            case MaskColor.Blue:
+                _masksEnabled[0] = false;
+                break;
+            case MaskColor.Red:
+                _masksEnabled[1] = false;
+                break;
+            case MaskColor.Yellow:
+                _masksEnabled[2] = false;
+                break;
+        }  
+    }
+
+    private void ChangeMask(MaskColor mask)
+    {
+        switch (mask)
+        {
+            case MaskColor.None:
+                _controller.excludeLayers = LayerMask.GetMask(new string[] {"BlueMask", "RedMask", "YellowMask"});
+                break;
+            case MaskColor.Blue:
+                _controller.excludeLayers = LayerMask.GetMask(new string[] {"RedMask", "YellowMask"});
+                break;
+            case MaskColor.Red:
+                _controller.excludeLayers = LayerMask.GetMask(new string[] {"BlueMask", "YellowMask"});
+                break;
+            case MaskColor.Yellow:
+                _controller.excludeLayers = LayerMask.GetMask(new string[] {"BlueMask", "RedMask"});
+                break;
+        }
+        GameController.ChangeMask(this.gameObject, mask);
     }
 }

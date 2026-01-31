@@ -1,6 +1,5 @@
 using UnityEngine;
 using NetworkMask.Mask;
-using NetworkMask.Utils;
 
 [RequireComponent(typeof(Collider))]
 public class ObjectColorConverter: MonoBehaviour
