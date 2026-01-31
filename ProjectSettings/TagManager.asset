@@ -15,8 +15,8 @@ TagManager:
   - Player
   - RedMask
   - BlueMask
-  - GreenMask
-  - 
+  - YellowMask
+  - Animations
   - 
   - 
   - 
@@ -45,7 +45,7 @@ TagManager:
   - Default
   - RedMask
   - BlueMask
-  - GreenMask
+  - YellowMask
   - Animations
   - Light Layer 5
   - Light Layer 6
