@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float cameraSensibility = 20f;    
     [SerializeField] int coyoteMiliseconds = 20;
     [SerializeField] float interactionDistance = 2f;
+    [SerializeField] float normalFOV = 60f;
+    [SerializeField] float sprintFOV = 65f;
+    [SerializeField] float fovTransitionSpeed = 3f;
     [SerializeField] float minGrabingDistance = 5f;
     public Camera playerCamera;
     public GameObject grabReference;
@@ -34,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
     float _cameraPitch;
     float _playerYaw;
+    float _targetFOV;
 
     MaskColor _currentMask;
     bool[] _masksEnabled;
@@ -74,6 +78,10 @@ public class PlayerController : MonoBehaviour
 
         // Confines the cursor
         Cursor.lockState = CursorLockMode.Confined;
+
+        // Initialize FOV
+        playerCamera.fieldOfView = normalFOV;
+        _targetFOV = normalFOV;
     }
 
     public void OnEnable() {
@@ -150,6 +158,7 @@ public class PlayerController : MonoBehaviour
     {
         PlayerMovement();
         CameraMovement();
+        UpdateFOV();
         Grabing();
     }
 
@@ -205,7 +214,13 @@ public class PlayerController : MonoBehaviour
         _playerPosition.localRotation = Quaternion.Euler(0f, _playerYaw, 0f);
     }
 
-    
+    private void UpdateFOV()
+    {
+        _targetFOV = _sprinting ? sprintFOV : normalFOV;
+        playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, _targetFOV, fovTransitionSpeed * Time.deltaTime);
+    }
+
+
 
     public void EnablePlayerMask(MaskColor mask)
     {
