@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3997674151212274379}
   - component: {fileID: 1885525367786020328}
   - component: {fileID: 7096938100793259927}
-  - component: {fileID: 3821387328237449235}
+  - component: {fileID: 969520613697289110}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &3821387328237449235
+--- !u!114 &969520613697289110
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,18 +158,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1773655809678392528}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7169b1e207f424e528e35131c899d98a, type: 3}
+  m_Script: {fileID: 11500000, guid: 25e6323f051ba4f9d92f2c74673f2f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  gravity: -25
-  maxSpeed: 6
+  gravity: -30
+  maxSpeed: 4
   acceleration: 20
   jumpHeight: 1.6
-  deceleration: 25
-  cameraSensibility: 100
+  deceleration: 40
+  sprintFactor: 1.6
+  cameraSensibility: 10
   coyoteMiliseconds: 20
-  interactionDistance: 3
-  minGrabingDistance: 2
+  interactionDistance: 2
+  minGrabingDistance: 5
   playerCamera: {fileID: 4538562590462997429}
   grabReference: {fileID: 2368408634552973641}
 --- !u!1 &2368408634552973641
@@ -270,7 +271,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0

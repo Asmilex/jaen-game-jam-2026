@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterController))]
+
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float gravity = -25f;
@@ -289,6 +290,8 @@ public class PlayerController : MonoBehaviour
         _holdingObjectBody = interactableObject.rigidbody;
         _holdingObjectBody.useGravity = false;
         _holdingObjectBody.freezeRotation = true;
+        _holdingObjectBody.isKinematic = true;
+        _holdingObjectBody.interpolation = RigidbodyInterpolation.Interpolate;
         _holdingObjectCollider = interactableObject.rigidbody.gameObject.GetComponent<Collider>();
         _holdingObjectCollider.enabled = false;
     }
@@ -296,6 +299,13 @@ public class PlayerController : MonoBehaviour
     private void Grabing()
     {
         if (!_holdingObject) return;
+        // Debug.Log(CameraUtils.IsVisibleByCamera(_holdingObject, playerCamera,false, _currentLayer));
+        if (!CameraUtils.IsVisibleByCamera(_holdingObject, playerCamera,false, _currentLayer))
+        {
+            DropObject();  
+            return;
+        } 
+
         Vector3 targetPos = grabReference.transform.position;
         Vector3 camPos = playerCamera.transform.position;
         float dist = Vector3.Distance(camPos, targetPos);
@@ -304,26 +314,50 @@ public class PlayerController : MonoBehaviour
         {
             targetPos = camPos + playerCamera.transform.forward.normalized * minGrabingDistance;
         }
-        Vector3 movement = (targetPos-_holdingObject.transform.position).normalized;
 
-        RaycastHit hit;
-        if (Physics.BoxCast(playerCamera.transform.position, _holdingObject.transform.lossyScale/2, playerCamera.transform.forward, out hit, playerCamera.transform.rotation, minGrabingDistance, LayerMask.GetMask(CollitionLayerName.BaseLayer)))
+        // Check for collisions between camera and target position using current layer
+        Vector3 directionToTarget = (targetPos - camPos).normalized;
+        float distanceToTarget = Vector3.Distance(camPos, targetPos);
+        
+        // Raycast with current layer to detect walls/obstacles
+        if (Physics.Raycast(camPos, directionToTarget, out RaycastHit hit, distanceToTarget, _currentLayer, QueryTriggerInteraction.Ignore))
         {
-            float distance = Mathf.Max(new float[]{Vector3.Distance(_holdingObject.transform.position, targetPos)-2f,0});
-            while (Physics.BoxCast(playerCamera.transform.position, _holdingObject.transform.lossyScale/2, playerCamera.transform.forward, out hit, playerCamera.transform.rotation, minGrabingDistance, LayerMask.GetMask(CollitionLayerName.BaseLayer)) && distance > 0);
+            // Ignore if the hit object is the grabbed object itself
+            if (hit.collider.gameObject != _holdingObject)
             {
-                targetPos = _holdingObject.transform.position + (movement*(distance));
-                distance = Mathf.Max(new float[]{Vector3.Distance(_holdingObject.transform.position, targetPos)-2f,0});
-                Debug.Log(distance);
-            } 
+                // Place object just before the collision point with proper offset
+                float safeDistance = Mathf.Max(hit.distance - 0.5f, minGrabingDistance);
+                targetPos = camPos + directionToTarget * safeDistance;
+            }
         }
-        _holdingObjectBody.position = targetPos;
+
+        // Check if object position would be inside a collider using box overlap
+        Vector3 boxHalfExtents = _holdingObject.transform.lossyScale / 2f;
+        Collider[] collidersAtPosition = Physics.OverlapBox(targetPos, boxHalfExtents, _holdingObject.transform.rotation, _currentLayer, QueryTriggerInteraction.Ignore);
+        
+        // If overlapping with a collider, don't move the object (keep previous position)
+        bool isOverlapping = false;
+        foreach (Collider col in collidersAtPosition)
+        {
+            if (col.gameObject != _holdingObject)
+            {
+                isOverlapping = true;
+                break;
+            }
+        }
+        
+        if (!isOverlapping)
+        {
+            _holdingObjectBody.position = targetPos;
+        }
     }
     private void DropObject()
     {
         _holdingObjectBody.useGravity = true;
         _holdingObjectBody.freezeRotation = false;
         _holdingObjectCollider.enabled = true;
+        _holdingObjectBody.isKinematic = false;
+        _holdingObjectBody.interpolation = RigidbodyInterpolation.None;
         _holdingObject = null;
     }
 }
