@@ -170,6 +170,9 @@ MonoBehaviour:
   cameraSensibility: 300
   coyoteMiliseconds: 100
   interactionDistance: 3
+  normalFOV: 75
+  sprintFOV: 86
+  fovTransitionSpeed: 4
   minGrabingDistance: 2
   playerCamera: {fileID: 4538562590462997429}
   grabReference: {fileID: 2368408634552973641}
