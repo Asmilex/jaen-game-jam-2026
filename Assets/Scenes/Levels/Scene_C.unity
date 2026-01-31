@@ -17043,10 +17043,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 969520613697289110, guid: 08466304cb8fd43be911e69911f4cef5, type: 3}
-      propertyPath: cameraSensibility
-      value: 30
-      objectReference: {fileID: 0}
     - target: {fileID: 1773655809678392528, guid: 08466304cb8fd43be911e69911f4cef5, type: 3}
       propertyPath: m_Name
       value: Player
