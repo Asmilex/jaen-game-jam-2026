@@ -2,8 +2,6 @@ using System;
 using NetworkMask.Constants;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterController))]
@@ -28,7 +26,7 @@ public class PlayerController : MonoBehaviour
     float _playerYaw;
     bool _sprinting = false;
     MaskColor _currentMask;
-    bool[] _masksEnabled = [false, false, false];
+    bool[] _masksEnabled;
 
     bool _coyoteGrounded = true;
     float _airSeconds = 0;
@@ -42,6 +40,7 @@ public class PlayerController : MonoBehaviour
         _inputs = GetComponent<PlayerInput>();
         _controller = GetComponent<CharacterController>();
         _playerPosition = GetComponent<Transform>();
+        _masksEnabled = new bool[] { false, false, false };
         _movement = new Vector3(0f,0f,0f);
         if (_inputs == null) throw new NullReferenceException("No player input found");  
         if (playerCamera == null) throw new NullReferenceException("No player camera found");
