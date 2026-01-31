@@ -121,8 +121,12 @@ public class PlayerController : MonoBehaviour
                 _cameraMovement = context.ReadValue<Vector2>();
                 break;
             case "Sprint":
-                var tempSprint = context.ReadValueAsButton();
-                if (_coyoteGrounded || !tempSprint) _sprinting = tempSprint;
+                _sprinting = context.ReadValueAsButton();
+                // if (_coyoteGrounded || !tempSprint)
+                // {
+                //     _sprinting = tempSprint;
+                //     Debug.Log("Sprinting");
+                // }
                 break;
             case "Interact":
                 if (context.ReadValueAsButton()) Interact();
@@ -163,15 +167,6 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerMovement()
     {
-        Vector3 desiredLocal = new Vector3(_movement.x, 0f, _movement.z);
-        desiredLocal = desiredLocal.normalized * (_sprinting ? maxSpeed * sprintFactor : maxSpeed);
-
-
-        Vector3 desiredWorld = _playerPosition.TransformDirection(desiredLocal);
-
-        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (_sprinting ? acceleration * sprintFactor : acceleration) : (_coyoteGrounded ? deceleration : deceleration - 25f);
-        _currentSpeed = Vector3.MoveTowards(_currentSpeed, desiredWorld, accel * Time.deltaTime);
-
         if (!_controller.isGrounded && _airSeconds > coyoteMiliseconds && _coyoteGrounded)
         {
             _coyoteGrounded = false;
@@ -180,11 +175,20 @@ public class PlayerController : MonoBehaviour
         {
             _airSeconds += Time.deltaTime * 1000;
         }
-        else if (_controller.isGrounded && _airSeconds != 0)
+        else if (_controller.isGrounded && (_airSeconds != 0 || !_coyoteGrounded))
         {
             _coyoteGrounded = true;
             _airSeconds = 0;
         }
+
+        bool shouldSprint = _sprinting && _coyoteGrounded;
+        Vector3 desiredLocal = new Vector3(_movement.x, 0f, _movement.z);
+        desiredLocal = desiredLocal.normalized * (shouldSprint ? maxSpeed * sprintFactor : maxSpeed);
+
+        Vector3 desiredWorld = _playerPosition.TransformDirection(desiredLocal);
+
+        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (shouldSprint ? acceleration * sprintFactor : acceleration) : (_coyoteGrounded ? deceleration : deceleration - 25f);
+        _currentSpeed = Vector3.MoveTowards(_currentSpeed, desiredWorld, accel * Time.deltaTime);
 
         // Jump + gravedad
         if (_coyoteGrounded)
@@ -225,7 +229,8 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateFOV()
     {
-        _targetFOV = _sprinting ? sprintFOV : normalFOV;
+
+        _targetFOV = (_sprinting && _coyoteGrounded) ? sprintFOV : normalFOV;
         playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, _targetFOV, fovTransitionSpeed * Time.deltaTime);
     }
 
