@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float cameraSensibility = 20f;    
     [SerializeField] int coyoteMiliseconds = 20;
     [SerializeField] float interactionDistance = 2f;
+    [SerializeField] float minGrabingDistance = 5f;
     public Camera playerCamera;
     public GameObject grabReference;
 
@@ -295,7 +296,16 @@ public class PlayerController : MonoBehaviour
     private void Grabing()
     {
         if (!_holdingObject) return;
-        _holdingObject.transform.position = grabReference.transform.position;
+        Vector3 targetPos = grabReference.transform.position;
+        Vector3 camPos = playerCamera.transform.position;
+        float dist = Vector3.Distance(camPos, targetPos);
+
+        if (dist < minGrabingDistance)
+        {
+            targetPos = camPos + playerCamera.transform.forward.normalized * minGrabingDistance;
+        }
+
+        _holdingObject.transform.position = targetPos;
     }
     private void DropObject()
     {
