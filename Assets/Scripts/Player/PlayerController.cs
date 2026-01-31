@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float gravity = -30f;
     // [SerializeField] float maxCameraSpeed = 15f;
     [SerializeField] float maxSpeed = 4f;
-    [SerializeField] float sprintMaxSpeed = 8f;
     float _realMaxSpeed;
     [SerializeField] float acceleration = 20f;
     [SerializeField] float jumpHeight = 1.6f;
@@ -28,6 +27,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float minGrabingDistance = 3f;
     public Camera playerCamera;
     public GameObject grabReference;
+
+    //Distancia que deberá recorrer el jugador para que suene un sonido de pisada
+    public float stepDistance = 1f;
+    //Clip del sonido de pisada
+    public AudioClip stepSound;
+    //Contador de distancia recorrida tras el ultimo paso
+    public float stepDistanceCounter = 0f;
+    //Referencia al sonido del personaje al caer
+    public AudioClip landingSound;
+    //Referencia del sonido del personaje al saltar
+    public AudioClip jumpSound;
+    //Para comprobar si se encontrba tocando el suelo en el ciclo anterior
+    private bool _previouslyGrounded = true;
+    //Referencia al audiosource
+    private AudioSource _audioSource;
+
 
     // ------ Player State ------------//
     Vector3 _currentSpeed;
@@ -57,6 +72,8 @@ public class PlayerController : MonoBehaviour
     bool _initialiced = false;
     ChangeMaskAnimationController _maskAnimation;
     bool _changeOnGoing = false;
+
+
 
     void Initialize()
     {
@@ -182,17 +199,20 @@ public class PlayerController : MonoBehaviour
         }
 
         bool shouldSprint = _sprinting && _coyoteGrounded;
+        bool mantainSpeed = _sprinting || !_coyoteGrounded;
         Vector3 desiredLocal = new Vector3(_movement.x, 0f, _movement.z);
-        desiredLocal = desiredLocal.normalized * (shouldSprint ? maxSpeed * sprintFactor : maxSpeed);
+        desiredLocal = desiredLocal.normalized * (mantainSpeed ? _realMaxSpeed : maxSpeed);
+        Debug.Log(_currentSpeed.magnitude);
 
         Vector3 desiredWorld = _playerPosition.TransformDirection(desiredLocal);
 
-        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (shouldSprint ? acceleration * sprintFactor : acceleration) : (_coyoteGrounded ? deceleration : deceleration - 25f);
+        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (shouldSprint ? acceleration * sprintFactor : acceleration) : (_coyoteGrounded ? deceleration : 0f);
         _currentSpeed = Vector3.MoveTowards(_currentSpeed, desiredWorld, accel * Time.deltaTime);
 
         // Jump + gravedad
         if (_coyoteGrounded)
         {
+
             if (_controller.isGrounded) _verticalSpeed = -1f;
             else _verticalSpeed = 0;// mantiene pegado al suelo
             if (_movement.y == 1)
@@ -216,6 +236,23 @@ public class PlayerController : MonoBehaviour
         _currentSpeed.y = _verticalSpeed;
 
         _controller.Move(_currentSpeed * Time.deltaTime);
+
+        //Si el player está grounded, el contador se suma
+        if (_coyoteGrounded)
+        {
+            //Distancia que recorrido el jugador 
+            stepDistanceCounter += new Vector3(_currentSpeed.x, 0f, _currentSpeed.z).magnitude * Time.deltaTime;
+        }
+        //Si la distancia recorrida es igual o superior a la distancia de una zancada, reseteamos el contador
+        if (stepDistanceCounter >= stepDistance)
+        {
+            stepDistanceCounter = -1f;
+            //Le damos un pitch random al audiosource para que el sonido no sea muy repetitivo
+            _audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+            //Reproducimos el sonido de pisada
+            _audioSource.PlayOneShot(stepSound);
+
+        }
     }
 
     private void CameraMovement()
