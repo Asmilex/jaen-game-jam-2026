@@ -17,21 +17,30 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float deceleration = 25f;
     [SerializeField] float cameraSensibility = 20f;    
     [SerializeField] int coyoteMiliseconds = 20;
+    [SerializeField] float interactionDistance = 2f;
+    [SerializeField] float minGrabingDistance = 5f;
     public Camera playerCamera;
+    public GameObject grabReference;
 
+    // ------ Player State ------------//
     Vector3 _currentSpeed;
     Vector3 _movement;
     float _verticalSpeed;
     Vector2 _cameraMovement;
-    Vector3 _currentCameraSpeed;
-    float _cameraPitch;
-    float _playerYaw;
-    bool _sprinting = false;
-    MaskColor _currentMask;
-    bool[] _masksEnabled;
-
     bool _coyoteGrounded = true;
     float _airSeconds = 0;
+    bool _sprinting = false;
+
+    float _cameraPitch;
+    float _playerYaw;
+
+    MaskColor _currentMask;
+    bool[] _masksEnabled;
+    LayerMask _currentLayer;
+
+    Rigidbody _holdingObject; 
+    //----------------------------------//
+
     PlayerInput _inputs;
     CharacterController _controller;
     Transform _playerPosition;
@@ -44,9 +53,11 @@ public class PlayerController : MonoBehaviour
         _playerPosition = GetComponent<Transform>();
         _masksEnabled = new bool[] { true, true, true };
         _movement = new Vector3(0f,0f,0f);
+        _holdingObject = null;
         if (_inputs == null) throw new NullReferenceException("No player input found");  
         if (playerCamera == null) throw new NullReferenceException("No player camera found");
-        GameController.ChangeMask(this.gameObject, MaskColor.None);
+        if (grabReference == null) throw new NullReferenceException("No grab reference found");
+        ChangeMask(MaskColor.None);
         _initialiced = true;
     }
 
@@ -89,6 +100,9 @@ public class PlayerController : MonoBehaviour
                 break;
             case "Sprint":
                 _sprinting = context.ReadValueAsButton();
+                break;
+            case "Interact":
+                if (context.ReadValueAsButton()) Interact();
                 break;
             case "BlueMask":
                 if (_currentMask != MaskColor.Blue && _masksEnabled[0])
@@ -133,6 +147,7 @@ public class PlayerController : MonoBehaviour
     {
         PlayerMovement();
         CameraMovement();
+        Grabing();
     }
 
     private void PlayerMovement()
@@ -191,6 +206,8 @@ public class PlayerController : MonoBehaviour
         _playerPosition.localRotation = Quaternion.Euler(0f, _playerYaw, 0f);
     }
 
+    
+
     public void EnablePlayerMask(MaskColor mask)
     {
         switch (mask)
@@ -228,18 +245,72 @@ public class PlayerController : MonoBehaviour
         switch (mask)
         {
             case MaskColor.None:
-                _controller.excludeLayers = LayerMask.GetMask(new string[] {"BlueMask", "RedMask", "YellowMask"});
+                _controller.excludeLayers = LayerMask.GetMask(new string[] {CollitionLayerName.BlueLayer, CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer});
+                _currentLayer = LayerMask.GetMask(new string[] {CollitionLayerName.BaseLayer});
                 break;
             case MaskColor.Blue:
-                _controller.excludeLayers = LayerMask.GetMask(new string[] {"RedMask", "YellowMask"});
+                _controller.excludeLayers = LayerMask.GetMask(new string[] {CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer});
+                _currentLayer = LayerMask.GetMask(new string[] {CollitionLayerName.BaseLayer, CollitionLayerName.BlueLayer});
                 break;
             case MaskColor.Red:
-                _controller.excludeLayers = LayerMask.GetMask(new string[] {"BlueMask", "YellowMask"});
+                _controller.excludeLayers = LayerMask.GetMask(new string[] {CollitionLayerName.BlueLayer, CollitionLayerName.YellowLayer});
+                _currentLayer = LayerMask.GetMask(new string[] {CollitionLayerName.BaseLayer, CollitionLayerName.RedLayer});
                 break;
             case MaskColor.Yellow:
-                _controller.excludeLayers = LayerMask.GetMask(new string[] {"BlueMask", "RedMask"});
+                _controller.excludeLayers = LayerMask.GetMask(new string[] {CollitionLayerName.BlueLayer, CollitionLayerName.RedLayer});
+                _currentLayer = LayerMask.GetMask(new string[] {CollitionLayerName.BaseLayer, CollitionLayerName.YellowLayer});
                 break;
         }
         GameController.ChangeMask(this.gameObject, mask);
+    }
+
+    private void Interact ()
+    {
+        if (_holdingObject != null)
+        {
+            DropObject();
+            return;
+        }
+
+        RaycastHit hitted;
+        bool collided = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hitted, interactionDistance, _currentLayer, QueryTriggerInteraction.Ignore);
+        if (collided) 
+        {
+            Debug.Log("Collided");
+            Debug.Log(hitted.distance);
+            try
+            {
+                var interactable = hitted.collider.gameObject.GetComponent<Interactable>();
+                if (interactable) Grab(hitted.rigidbody);
+            } catch{}
+        }
+    }
+
+    private void Grab(Rigidbody interactableObject)
+    {
+        _holdingObject = interactableObject;
+        _holdingObject.useGravity = false;
+        _holdingObject.freezeRotation = true;
+    }
+
+    private void Grabing()
+    {
+        if (!_holdingObject) return;
+        Vector3 targetPos = grabReference.transform.position;
+        Vector3 camPos = playerCamera.transform.position;
+        float dist = Vector3.Distance(camPos, targetPos);
+
+        if (dist < minGrabingDistance)
+        {
+            targetPos = camPos + playerCamera.transform.forward.normalized * minGrabingDistance;
+        }
+
+        _holdingObject.transform.position = targetPos;
+    }
+    private void DropObject()
+    {
+        _holdingObject.useGravity = true;
+        _holdingObject.freezeRotation = false;
+        _holdingObject = null;
     }
 }
