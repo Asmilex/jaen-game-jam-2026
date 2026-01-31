@@ -1103,7 +1103,7 @@ PrefabInstance:
       objectReference: {fileID: 1790975030}
     - target: {fileID: 1727001524604477613, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_Name
-      value: DoorTriad (1)
+      value: Puerta triada hacia C
       objectReference: {fileID: 0}
     - target: {fileID: 1997756298552369861, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_Mesh
@@ -1174,11 +1174,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
---- !u!1 &132158656 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7570239818401328334, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
-  m_PrefabInstance: {fileID: 132158655}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &133818648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1202,7 +1197,7 @@ PrefabInstance:
     - target: {fileID: 1486377436905162038, guid: bbf4e08e7a61c86a3aeaac71be7f0514, type: 3}
       propertyPath: TargetObject
       value: 
-      objectReference: {fileID: 132158656}
+      objectReference: {fileID: 1787055965}
     - target: {fileID: 2749777011600198732, guid: bbf4e08e7a61c86a3aeaac71be7f0514, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -11727,7 +11722,7 @@ PrefabInstance:
       objectReference: {fileID: 676856394}
     - target: {fileID: 1727001524604477613, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_Name
-      value: DoorTriad
+      value: Puerta triada desde B
       objectReference: {fileID: 0}
     - target: {fileID: 1997756298552369861, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_Mesh
@@ -13601,6 +13596,11 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &1787055965 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7570239818401328334, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
+  m_PrefabInstance: {fileID: 1274212361}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1790975030
 Mesh:
   m_ObjectHideFlags: 0
