@@ -197,6 +197,14 @@ public class PlayerController : MonoBehaviour
                 _coyoteGrounded = false;
             }
         }
+        else
+        {
+            var hittedCeiling = Physics.Raycast(transform.position, new Vector3(0, 1, 0), 1.1f, _currentLayer);
+            if (hittedCeiling)
+            {
+                _verticalSpeed = -1f;
+            }
+        }
 
 
         _verticalSpeed += gravity * Time.deltaTime;
