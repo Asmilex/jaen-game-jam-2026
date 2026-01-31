@@ -54,21 +54,30 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(Player);
     }
 
-    public static async void ChangeScene(string nextLevel, byte doorIndex, Vector3 spawnPosition = default)
+    public static void ChangeScene(string nextLevel, byte doorIndex, Vector3? spawnPosition = null)
     {
         //Scene load
-        await SceneManager.LoadSceneAsync(nextLevel);
+        var operation = SceneManager.LoadSceneAsync(nextLevel);
+        operation.completed += (asyncOperation) =>
+        {
+            MovePlayerToDoor(doorIndex, spawnPosition);
+        };
 
         _lastDoorIndex = doorIndex;
-        MovePlayerToDoor(doorIndex, spawnPosition);
     }
 
     public static void ResetPlayer()
     {
-        MovePlayerToDoor(_lastDoorIndex);
+        //Scene reload
+        var currentScene = SceneManager.GetActiveScene().name;
+        var operation = SceneManager.LoadSceneAsync(currentScene);
+        operation.completed += (asyncOperation) =>
+        {
+            MovePlayerToDoor(_lastDoorIndex);
+        };
     }
 
-    private static void MovePlayerToDoor(byte doorIndex, Vector3 spawnPosition = default)
+    private static void MovePlayerToDoor(byte doorIndex, Vector3? spawnPosition = null)
     {
         var doorName = Door01NamePrefix + doorIndex.ToString("D2");
         var door = GameObject.Find(doorName);
@@ -82,13 +91,18 @@ public class GameController : MonoBehaviour
         // We calculate the offset from that position to the player position and apply the same offset to the door position
         // to seamlessly position the player in the new scene
         Vector3 targetPosition = door.transform.position;
-        if (spawnPosition != default)
+        Quaternion targetRotation = Player.transform.rotation;
+        if (spawnPosition == null)
         {
-            Vector3 offset = Player.transform.position - spawnPosition;
+            Quaternion directionToCenter = Quaternion.LookRotation(Vector3.zero - door.transform.position);
+            targetRotation = directionToCenter;
+        }
+        else
+        {
+            Vector3 offset = Player.transform.position - spawnPosition.Value;
             targetPosition += offset;
         }
-        Player.transform.position = targetPosition;
-        // we keep the player's rotation
+        Player.transform.SetPositionAndRotation(targetPosition, targetRotation);
     }
 
     public void SaveGameObjectStatus(string name, Transform transform, bool isActive)
