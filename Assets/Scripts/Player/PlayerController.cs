@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(AudioSource))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -33,11 +34,13 @@ public class PlayerController : MonoBehaviour
     //Clip del sonido de pisada
     public AudioClip stepSound;
     //Contador de distancia recorrida tras el ultimo paso
-    public float stepDistanceCounter = 0f;
+    float stepDistanceCounter = 0f;
     //Referencia al sonido del personaje al caer
     public AudioClip landingSound;
     //Referencia del sonido del personaje al saltar
     public AudioClip jumpSound;
+    public AudioClip changeMaskSound;
+    public AudioClip newMaskSound;
     //Para comprobar si se encontrba tocando el suelo en el ciclo anterior
     private bool _previouslyGrounded = true;
     //Referencia al audiosource
@@ -72,7 +75,7 @@ public class PlayerController : MonoBehaviour
     bool _initialiced = false;
     ChangeMaskAnimationController _maskAnimation;
     bool _changeOnGoing = false;
-
+    bool _wasSprintingBeforeJumping = false;
 
 
     void Initialize()
@@ -84,6 +87,7 @@ public class PlayerController : MonoBehaviour
         _movement = new Vector3(0f, 0f, 0f);
         _holdingObject = null;
         _realMaxSpeed = maxSpeed * sprintFactor;
+        _audioSource = GetComponent<AudioSource>();
         if (_inputs == null) throw new NullReferenceException("No player input found");
         if (playerCamera == null) throw new NullReferenceException("No player camera found");
         if (grabReference == null) throw new NullReferenceException("No grab reference found");
@@ -196,13 +200,13 @@ public class PlayerController : MonoBehaviour
         {
             _coyoteGrounded = true;
             _airSeconds = 0;
+            _audioSource.PlayOneShot(landingSound);
         }
 
         bool shouldSprint = _sprinting && _coyoteGrounded;
-        bool mantainSpeed = _sprinting || !_coyoteGrounded;
+        bool mantainSpeed = (_wasSprintingBeforeJumping && !_coyoteGrounded) || shouldSprint;
         Vector3 desiredLocal = new Vector3(_movement.x, 0f, _movement.z);
         desiredLocal = desiredLocal.normalized * (mantainSpeed ? _realMaxSpeed : maxSpeed);
-        Debug.Log(_currentSpeed.magnitude);
 
         Vector3 desiredWorld = _playerPosition.TransformDirection(desiredLocal);
 
@@ -219,6 +223,8 @@ public class PlayerController : MonoBehaviour
             {
                 _verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 _coyoteGrounded = false;
+                _wasSprintingBeforeJumping = _sprinting;
+                _audioSource.PlayOneShot(jumpSound);
             }
         }
         else
@@ -287,6 +293,7 @@ public class PlayerController : MonoBehaviour
                 _masksEnabled[2] = true;
                 break;
         }
+        _audioSource.PlayOneShot(newMaskSound);
     }
 
     public void DisablePlayerMask(MaskColor mask)
@@ -313,6 +320,7 @@ public class PlayerController : MonoBehaviour
         if (mask != MaskColor.None)
         {
             _maskAnimation.ChangeMaskTransition(mask);
+            _audioSource.PlayOneShot(changeMaskSound);
             yield return new WaitForSeconds(_maskAnimation.ChangeMaskTransitionAnimationLength());
         }
         _currentMask = mask;
@@ -339,6 +347,7 @@ public class PlayerController : MonoBehaviour
         }
         if (_holdingObject != null) DropObject();
         GameController.ChangeMask(this.gameObject, mask);
+        _controller.includeLayers = _currentLayer;
     }
 
     private void Interact()
