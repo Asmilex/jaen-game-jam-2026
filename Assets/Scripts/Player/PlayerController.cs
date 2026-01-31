@@ -260,7 +260,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IEnumerator ChangeMask(MaskColor mask)
+    public IEnumerator ChangeMask(MaskColor mask)
     {
         if (!_changeOnGoing) _changeOnGoing = true;
         else yield break;
