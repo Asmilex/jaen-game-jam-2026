@@ -6,15 +6,7 @@ using UnityEngine.AdaptivePerformance;
 public class GrabbableMaskObject : MonoBehaviour
 {
     private PlayerController playerController;
-
-    [Header("Prefab references")]
-    [SerializeField] private MeshRenderer maskAnimMeshRenderer;
-
-    [Header("Materials")]
-    [SerializeField] private Material RedMaterial;
-    [SerializeField] private Material BlueMaterial;
-    [SerializeField] private Material YellowMaterial;
-
+    
     [Header("Mask type")]
     [SerializeField] private GrabbableMaskColor maskColor;
     enum GrabbableMaskColor
@@ -23,6 +15,21 @@ public class GrabbableMaskObject : MonoBehaviour
         RedMask,
         YellowMask,
     }
+
+    [Header("Prefab references")]
+    [SerializeField] private MeshRenderer maskAnimMeshRenderer;
+    [SerializeField] private Light maskPointLight;
+    [SerializeField] private Collider maskCollider;
+    [SerializeField] private Color maskPointLightColorBlue;
+    [SerializeField] private Color maskPointLightColorRed;
+    [SerializeField] private Color maskPointLightColorYellow;
+
+    [Header("Materials")]
+    [SerializeField] private Material RedMaterial;
+    [SerializeField] private Material BlueMaterial;
+    [SerializeField] private Material YellowMaterial;
+
+    
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,12 +44,15 @@ public class GrabbableMaskObject : MonoBehaviour
         {
             case GrabbableMaskColor.BlueMask:
                 maskAnimMeshRenderer.material = BlueMaterial;
+                maskPointLight.color = maskPointLightColorBlue;
                 break;
             case GrabbableMaskColor.RedMask:
                 maskAnimMeshRenderer.material = RedMaterial;
+                maskPointLight.color = maskPointLightColorRed;
                 break;
             case GrabbableMaskColor.YellowMask:
                 maskAnimMeshRenderer.material = YellowMaterial;
+                maskPointLight.color = maskPointLightColorYellow;
                 break;
 
         }
@@ -74,8 +84,11 @@ public class GrabbableMaskObject : MonoBehaviour
                 break;
         }
 
-        // Object is destroyed at the end of execution
-        Destroy(this.gameObject);
+        //Object is destroyed at the end of execution
+        maskAnimMeshRenderer.enabled = false;
+        maskPointLight.enabled = false;
+        maskCollider.enabled = false;
+
     }
 
 

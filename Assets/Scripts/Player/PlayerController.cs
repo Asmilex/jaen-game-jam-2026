@@ -257,6 +257,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!_changeOnGoing) _changeOnGoing = true;
         else yield break;
+
         if (mask != MaskColor.None)
         {
             _maskAnimation.ChangeMaskTransition(mask);
@@ -264,6 +265,7 @@ public class PlayerController : MonoBehaviour
         }
         _currentMask = mask;
         _changeOnGoing = false;
+
         switch (mask)
         {
             case MaskColor.None:

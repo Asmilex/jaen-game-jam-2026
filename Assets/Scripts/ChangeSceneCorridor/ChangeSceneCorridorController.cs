@@ -44,7 +44,7 @@ public class ChangeSceneCorridorController : MonoBehaviour
         //TODO - Door SFX
 
         //Coroutine to enable trigger to load next level. Disabled at the beggining to avoid player trigger at the very beggining of scene
-        StartCoroutine(EnableTriggerAfterAFewSecondsAfterLoadingScene());
+        //StartCoroutine(EnableTriggerAfterAFewSecondsAfterLoadingScene());
     }
 
     #endregion
