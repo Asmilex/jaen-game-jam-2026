@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float gravity = -25f;
     // [SerializeField] float maxCameraSpeed = 15f;
     [SerializeField] float maxSpeed = 6f;
+    float _realMaxSpeed;
     [SerializeField] float acceleration = 20f;
     [SerializeField] float jumpHeight = 1.6f;
     [SerializeField] float deceleration = 25f;
@@ -64,6 +65,7 @@ public class PlayerController : MonoBehaviour
         _masksEnabled = new bool[] { true, true, true };
         _movement = new Vector3(0f, 0f, 0f);
         _holdingObject = null;
+        _realMaxSpeed = maxSpeed * sprintFactor;
         if (_inputs == null) throw new NullReferenceException("No player input found");
         if (playerCamera == null) throw new NullReferenceException("No player camera found");
         if (grabReference == null) throw new NullReferenceException("No grab reference found");
@@ -127,30 +129,21 @@ public class PlayerController : MonoBehaviour
                 if (_currentMask != MaskColor.Blue && _masksEnabled[0])
                 {
                     Debug.Log("BlueMask Action");
-                    _currentMask = MaskColor.Blue;
-                    _maskAnimation.ChangeMaskTransition(_currentMask);
                     StartCoroutine(ChangeMask(MaskColor.Blue));
-                    ChangeMask(_currentMask);
                 }
                 break;
             case "RedMask":
                 if (_currentMask != MaskColor.Red && _masksEnabled[1])
                 {
                     Debug.Log("RedMask Action");
-                    _currentMask = MaskColor.Red;
-                    _maskAnimation.ChangeMaskTransition(_currentMask);
                     StartCoroutine(ChangeMask(MaskColor.Red));
-                    ChangeMask(_currentMask);
                 }
                 break;
             case "YellowMask":
                 if (_currentMask != MaskColor.Yellow && _masksEnabled[2])
                 {
                     Debug.Log("YellowMask Action");
-                    _currentMask = MaskColor.Yellow;
-                    _maskAnimation.ChangeMaskTransition(_currentMask);
                     StartCoroutine(ChangeMask(MaskColor.Yellow));
-                    ChangeMask(_currentMask);
                 }
                 break;
         }
@@ -174,7 +167,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 desiredWorld = _playerPosition.TransformDirection(desiredLocal);
 
-        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (_sprinting ? acceleration * sprintFactor : acceleration) : deceleration;
+        float accel = (desiredWorld.sqrMagnitude > 0.001f) ? (_sprinting ? acceleration * sprintFactor : acceleration) : (_coyoteGrounded ? deceleration : 0);
         _currentSpeed = Vector3.MoveTowards(_currentSpeed, desiredWorld, accel * Time.deltaTime);
 
         if (!_controller.isGrounded && _airSeconds > coyoteMiliseconds && _coyoteGrounded)
@@ -264,14 +257,19 @@ public class PlayerController : MonoBehaviour
     {
         if (!_changeOnGoing) _changeOnGoing = true;
         else yield break;
-        yield return new WaitForSeconds(_maskAnimation.ChangeMaskTransitionAnimationLength());
+        if (mask != MaskColor.None)
+        {
+            _maskAnimation.ChangeMaskTransition(mask);
+            yield return new WaitForSeconds(_maskAnimation.ChangeMaskTransitionAnimationLength());
+        }
+        _currentMask = mask;
         _changeOnGoing = false;
         switch (mask)
         {
-            // case MaskColor.None:
-            //     _controller.excludeLayers = LayerMask.GetMask(new string[] { CollitionLayerName.BlueLayer, CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer });
-            //     _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer });
-            //     break;
+            case MaskColor.None:
+                _controller.excludeLayers = LayerMask.GetMask(new string[] { CollitionLayerName.BlueLayer, CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer });
+                _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer });
+                break;
             case MaskColor.Blue:
                 _controller.excludeLayers = LayerMask.GetMask(new string[] { CollitionLayerName.RedLayer, CollitionLayerName.YellowLayer });
                 _currentLayer = LayerMask.GetMask(new string[] { CollitionLayerName.BaseLayer, CollitionLayerName.BlueLayer });
