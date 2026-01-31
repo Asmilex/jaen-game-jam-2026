@@ -3,6 +3,7 @@ using NetworkMask.Constants;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterController))]
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     float _playerYaw;
     bool _sprinting = false;
     MaskColor _currentMask;
+    bool[] _masksEnabled = [false, false, false];
 
     bool _coyoteGrounded = true;
     float _airSeconds = 0;
@@ -87,7 +89,7 @@ public class PlayerController : MonoBehaviour
                 _sprinting = context.ReadValueAsButton();
                 break;
             case "BlueMask":
-                if (_currentMask != MaskColor.Blue)
+                if (_currentMask != MaskColor.Blue && _masksEnabled[0])
                 {
                     _currentMask = MaskColor.Blue;
                 } else
@@ -97,7 +99,7 @@ public class PlayerController : MonoBehaviour
                 GameController.ChangeMask(this.gameObject, _currentMask);
                 break;
             case "RedMask":
-                if (_currentMask != MaskColor.Red)
+                if (_currentMask != MaskColor.Red && _masksEnabled[1])
                 {
                     _currentMask = MaskColor.Red;
                 } else
@@ -106,8 +108,8 @@ public class PlayerController : MonoBehaviour
                 }
                 GameController.ChangeMask(this.gameObject, _currentMask);
                 break;
-            case "GreenMask":
-                if (_currentMask != MaskColor.Green)
+            case "YellowMask":
+                if (_currentMask != MaskColor.Green && _masksEnabled[2])
                 {
                     _currentMask = MaskColor.Green;
                 } else
@@ -181,5 +183,37 @@ public class PlayerController : MonoBehaviour
 
         playerCamera.transform.localRotation = Quaternion.Euler(_cameraPitch* -1, 0f, 0f);
         _playerPosition.localRotation = Quaternion.Euler(0f, _playerYaw, 0f);
+    }
+
+    public void EnablePlayerMask(MaskColor mask)
+    {
+        switch (mask)
+        {
+            case MaskColor.Blue:
+                _masksEnabled[0] = true;
+                break;
+            case MaskColor.Red:
+                _masksEnabled[1] = true;
+                break;
+            case MaskColor.Green:
+                _masksEnabled[2] = true;
+                break;
+        }        
+    }
+
+    public void DisablePlayerMask(MaskColor mask)
+    {
+        switch (mask)
+        {
+            case MaskColor.Blue:
+                _masksEnabled[0] = false;
+                break;
+            case MaskColor.Red:
+                _masksEnabled[1] = false;
+                break;
+            case MaskColor.Green:
+                _masksEnabled[2] = false;
+                break;
+        }  
     }
 }

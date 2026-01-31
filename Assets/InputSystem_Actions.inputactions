@@ -106,7 +106,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "GreenMask",
+                    "name": "YellowMask",
                     "type": "Button",
                     "id": "8ca0cb06-2bab-4849-b12c-496424b150ef",
                     "expectedControlType": "",
@@ -519,7 +519,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "GreenMask",
+                    "action": "YellowMask",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
