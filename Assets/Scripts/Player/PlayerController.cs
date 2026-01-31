@@ -128,30 +128,30 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("BlueMask Action");
                     _currentMask = MaskColor.Blue;
+                    _maskAnimation.ChangeMaskTransition(_currentMask);
+                    StartCoroutine(ChangeMask(MaskColor.Blue));
+                    ChangeMask(_currentMask);
                 }
-                _maskAnimation.ChangeMaskTransition(_currentMask);
-                StartCoroutine(ChangeMask(MaskColor.Blue));
-                ChangeMask(_currentMask);
                 break;
             case "RedMask":
                 if (_currentMask != MaskColor.Red && _masksEnabled[1])
                 {
                     Debug.Log("RedMask Action");
                     _currentMask = MaskColor.Red;
+                    _maskAnimation.ChangeMaskTransition(_currentMask);
+                    StartCoroutine(ChangeMask(MaskColor.Red));
+                    ChangeMask(_currentMask);
                 }
-                _maskAnimation.ChangeMaskTransition(_currentMask);
-                StartCoroutine(ChangeMask(MaskColor.Red));
-                ChangeMask(_currentMask);
                 break;
             case "YellowMask":
                 if (_currentMask != MaskColor.Yellow && _masksEnabled[2])
                 {
                     Debug.Log("YellowMask Action");
                     _currentMask = MaskColor.Yellow;
+                    _maskAnimation.ChangeMaskTransition(_currentMask);
+                    StartCoroutine(ChangeMask(MaskColor.Yellow));
+                    ChangeMask(_currentMask);
                 }
-                _maskAnimation.ChangeMaskTransition(_currentMask);
-                StartCoroutine(ChangeMask(MaskColor.Yellow));
-                ChangeMask(_currentMask);
                 break;
         }
     }
