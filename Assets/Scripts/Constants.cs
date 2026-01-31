@@ -55,8 +55,8 @@ namespace NetworkMask.Constants
     
     public static class BaseLayer
     {
-        public static LayerMask CollitionBaseLayer = LayerMask.GetMask(CollitionLayerName.BaseLayer);
-        public static LayerMask BasePlayerLayer = LayerMask.GetMask(CollitionLayerName.BaseLayer, CollitionLayerName.PlayerLayer);
+        public static LayerMask CollitionBaseLayer = LayerMask.GetMask(CollitionLayerName.BaseLayer, "Default");
+        public static LayerMask BasePlayerLayer = LayerMask.GetMask(CollitionLayerName.BaseLayer, CollitionLayerName.PlayerLayer, "Default");
         public static RenderingLayerMask renderingLayerMask = RenderingLayerMask.GetMask(RenderMaskLayerName.DefaultMaskLayer);
     }
 }
