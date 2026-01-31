@@ -14642,6 +14642,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Yellow platform
       objectReference: {fileID: 0}
+    - target: {fileID: 1163214077138065784, guid: a9f113eeb38be42ed8f6fa10672550ea, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bc37780d5d1a579feb8f6ab02eb05554, type: 2}
     - target: {fileID: 1231910909529513448, guid: a9f113eeb38be42ed8f6fa10672550ea, type: 3}
       propertyPath: m_LocalPosition.x
       value: -19.2233
@@ -19331,6 +19335,10 @@ PrefabInstance:
     - target: {fileID: 953095005808116950, guid: e1634e805ddf9e44e9fec7f46a24d95d, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 953095005808116950, guid: e1634e805ddf9e44e9fec7f46a24d95d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1179260372283898326, guid: e1634e805ddf9e44e9fec7f46a24d95d, type: 3}
       propertyPath: m_Mesh

@@ -6,7 +6,7 @@ public class ChangeSceneCorridorTriggerDettection : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Interactuado con player");
+        //Debug.Log("Interactuado con player");
         changeSceneCorridorController.LoadNextLevel(transform.position);
     }
 
