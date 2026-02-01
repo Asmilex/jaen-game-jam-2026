@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NetworkMask.Constants;
 using UnityEngine;
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour
     private static byte _lastDoorIndex = 0;
     public static byte LastDoorIndex => _lastDoorIndex;
     public GameObject Player;
+    private readonly DateTime startTime = DateTime.Now;
 
     public static void ChangeMask(GameObject sender, MaskColor newColor)
     {
@@ -45,6 +47,12 @@ public class GameController : MonoBehaviour
         DontDestroyOnLoad(Player);
         DontDestroyOnLoad(gameObject);
         _instance = this;
+    }
+
+    public string TimeSpentOnSession()
+    {
+        TimeSpan timeSpan = DateTime.Now - startTime;
+        return string.Format("{0:D2}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
     }
 
     public void ChangeScene(string nextLevel, byte doorIndex)
