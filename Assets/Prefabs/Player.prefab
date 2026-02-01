@@ -463,7 +463,7 @@ MonoBehaviour:
   jumpHeight: 2
   deceleration: 35
   sprintFactor: 2
-  cameraSensibility: 300
+  cameraSensibility: 50
   coyoteMiliseconds: 100
   interactionDistance: 3
   normalFOV: 75
