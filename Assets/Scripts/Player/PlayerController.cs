@@ -251,6 +251,7 @@ public class PlayerController : MonoBehaviour
             {
                 _verticalSpeed = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 _coyoteGrounded = false;
+                _airSeconds = 0;
                 _wasSprintingBeforeJumping = _sprinting;
                 _audioSource.PlayOneShot(jumpSound);
             }
