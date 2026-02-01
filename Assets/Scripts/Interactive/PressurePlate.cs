@@ -19,6 +19,9 @@ namespace NetworkMask.Interactive
         [Tooltip("The color of the pressure plate. None will affect all colors.")]
         public MaskColor PlateColor = MaskColor.None;
 
+        [Tooltip("If true, the player can activate the pressure plate.")]
+        public bool PlayerCanActivate = true;
+
         private bool _isActive = false;
         public bool IsActive => _isActive;
 
@@ -36,7 +39,7 @@ namespace NetworkMask.Interactive
         {
             _ElementCount++;
             var otherColor = other.GetComponent<ColoredObject>()?.MaskColor ?? MaskColor.None;
-            if (otherColor != PlateColor && !other.CompareTag("Player"))
+            if (otherColor != PlateColor && (!PlayerCanActivate || !other.CompareTag("Player")))
             {
                 return;
             }
@@ -55,7 +58,7 @@ namespace NetworkMask.Interactive
         {
             _ElementCount = (ushort)Mathf.Max(0, _ElementCount - 1);
             var otherColor = other.GetComponent<ColoredObject>()?.MaskColor ?? MaskColor.None;
-            if (otherColor != PlateColor && !other.CompareTag("Player"))
+            if (otherColor != PlateColor && (!PlayerCanActivate || !other.CompareTag("Player")))
             {
                 return;
             }
