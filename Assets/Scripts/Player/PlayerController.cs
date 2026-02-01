@@ -499,4 +499,19 @@ public class PlayerController : MonoBehaviour
         }
         _uiController.NoInteractableOnSight();
     }
+
+    public bool HasMask(MaskColor mask)
+    {
+        switch (mask)
+        {
+            case MaskColor.Red:
+                return _masksEnabled[1];
+            case MaskColor.Blue:
+                return _masksEnabled[0];
+            case MaskColor.Yellow:
+                return _masksEnabled[2];
+            default:
+                return false;
+        }
+    }
 }
