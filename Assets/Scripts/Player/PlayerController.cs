@@ -292,8 +292,8 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateFOV()
     {
-
-        _targetFOV = (_sprinting && _coyoteGrounded) ? sprintFOV : normalFOV;
+        bool mantainSpeed = (_wasSprintingBeforeJumping && !_coyoteGrounded) || _sprinting && _coyoteGrounded;
+        _targetFOV = mantainSpeed ? sprintFOV : normalFOV;
         playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, _targetFOV, fovTransitionSpeed * Time.deltaTime);
     }
 
