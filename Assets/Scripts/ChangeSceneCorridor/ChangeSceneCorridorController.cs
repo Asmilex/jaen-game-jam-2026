@@ -16,6 +16,10 @@ public class ChangeSceneCorridorController : MonoBehaviour
     [SerializeField] private AnimationClip closeDoorAnimation;
     [SerializeField] private float extraTimeBeforeLoadingNextLevel = 2;
 
+    [Header("Door sound effects")]
+    [SerializeField] private AudioSource movableDoorAudiosource;
+    [SerializeField] private AudioClip movableDoorAudioClip;
+
     [Header("Trigger Control")]
     [SerializeField] private GameObject changeSceneTrigger;
 
@@ -40,7 +44,9 @@ public class ChangeSceneCorridorController : MonoBehaviour
 
         //Door opening
         doorsAnimatorController.SetTrigger("OpenDoor");
-        //TODO - Door SFX
+
+        //DoorSFX
+        movableDoorAudiosource.PlayOneShot(movableDoorAudioClip);
 
         //Coroutine to enable trigger to load next level. Disabled at the beggining to avoid player trigger at the very beggining of scene
         //StartCoroutine(EnableTriggerAfterAFewSecondsAfterLoadingScene());
@@ -62,7 +68,9 @@ public class ChangeSceneCorridorController : MonoBehaviour
 
         //Door close and wait
         doorsAnimatorController.SetTrigger("CloseDoor");
-        //TODO - Door SFX
+        //Door SFX
+        movableDoorAudiosource.PlayOneShot(movableDoorAudioClip);
+
         yield return new WaitForSeconds(closeDoorAnimation.length + extraTimeBeforeLoadingNextLevel);
 
         //Change scene
