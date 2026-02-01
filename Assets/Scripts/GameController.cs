@@ -23,6 +23,8 @@ public class GameController : MonoBehaviour
     private const string DoorNamePrefix = "Door_";
     public delegate void MaskChangeHandler(GameObject sender, MaskChangeEventArgs args);
     public static event MaskChangeHandler OnMaskChange;
+    private static MaskColor _currentMaskColor = MaskColor.None;
+    public static MaskColor CurrentMaskColor => _currentMaskColor;
     private static byte _lastDoorIndex = 0;
     public static byte LastDoorIndex => _lastDoorIndex;
     public GameObject Player;
@@ -30,6 +32,7 @@ public class GameController : MonoBehaviour
     public static void ChangeMask(GameObject sender, MaskColor newColor)
     {
         OnMaskChange?.Invoke(sender, new MaskChangeEventArgs { NewColor = newColor });
+        _currentMaskColor = newColor;
     }
 
     void Start()
