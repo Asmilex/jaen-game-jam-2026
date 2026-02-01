@@ -8157,7 +8157,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3207380928628063637, guid: d78c291036f45c848800cbf5eab290e1, type: 3}
       propertyPath: maskColor
-      value: 2
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3885808692985529200, guid: d78c291036f45c848800cbf5eab290e1, type: 3}
       propertyPath: m_LocalPosition.x
