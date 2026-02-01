@@ -56,12 +56,12 @@ public class ChangeSceneCorridorController : MonoBehaviour
 
     #region EXITING SCENE
     [ContextMenu("Load Next Level")]
-    public void LoadNextLevel(Vector3 spawnPosition = default)
+    public void LoadNextLevel(Vector3 spawnPosition = default, Vector3 playerOffset = default)
     {
-        StartCoroutine(LoadNextLevelLogic(spawnPosition));
+        StartCoroutine(LoadNextLevelLogic(spawnPosition, playerOffset));
     }
 
-    private IEnumerator LoadNextLevelLogic(Vector3 spawnPosition)
+    private IEnumerator LoadNextLevelLogic(Vector3 spawnPosition, Vector3 playerOffset)
     {
         //Trigger deactivation to avoid multiple hits
         changeSceneTrigger.SetActive(false);
@@ -76,7 +76,9 @@ public class ChangeSceneCorridorController : MonoBehaviour
         //Change scene
         if (_allowedToLoadNextLevel)
         {
-            GameController.ChangeScene(levelNameToLoadAfterPlayerEnter, TargetDoorIndex, spawnPosition);
+            Debug.Log($"[CORRIDOR] Loading scene: {levelNameToLoadAfterPlayerEnter}, TargetDoorIndex: {TargetDoorIndex}");
+            Debug.Log($"[CORRIDOR] SpawnPosition: {spawnPosition}, PlayerOffset: {playerOffset}");
+            GameController.ChangeScene(levelNameToLoadAfterPlayerEnter, TargetDoorIndex, spawnPosition, playerOffset);
         }
     }
     #endregion

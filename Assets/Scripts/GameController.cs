@@ -35,34 +35,37 @@ public class GameController : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(gameObject);
-        var playerObjects = GameObject.FindGameObjectsWithTag("Player");
-        if (playerObjects.Length > 1)
-        {
-            Debug.LogWarning("Multiple objects with tag 'Player' found in the scene! There should be only one.");
-            foreach (var obj in playerObjects)
-            {
-                if (obj != Player)
-                {
-                    Destroy(obj);
-                }
-            }
-            return;
-        }
         Player = GameObject.FindGameObjectWithTag("Player");
         if (Player == null)
         {
             Debug.LogError("Player object with tag 'Player' not found in the scene!");
         }
-        DontDestroyOnLoad(Player);
     }
 
-    public static void ChangeScene(string nextLevel, byte doorIndex, Vector3? spawnPosition = null)
+    public static void ChangeScene(string nextLevel, byte doorIndex, Vector3? spawnPosition = null, Vector3? playerOffset = null)
     {
+        // Destroy the old player before loading the new scene
+        if (Player != null)
+        {
+            Debug.Log($"[GAME_CONTROLLER] Destroying old Player at position: {Player.transform.position}");
+            Destroy(Player);
+            Player = null;
+        }
+
         //Scene load
         var operation = SceneManager.LoadSceneAsync(nextLevel);
         operation.completed += (asyncOperation) =>
         {
-            MovePlayerToDoor(doorIndex, spawnPosition);
+            // Find the player in the new scene
+            Player = GameObject.FindGameObjectWithTag("Player");
+            if (Player == null)
+            {
+                Debug.LogError("[GAME_CONTROLLER] Player not found in new scene!");
+                return;
+            }
+            Debug.Log($"[GAME_CONTROLLER] Found new Player in scene at position: {Player.transform.position}");
+
+            MovePlayerToDoor(doorIndex, spawnPosition, playerOffset);
         };
 
         _lastDoorIndex = doorIndex;
@@ -70,18 +73,38 @@ public class GameController : MonoBehaviour
 
     public static void ResetPlayer()
     {
+        // Destroy the old player before reloading
+        if (Player != null)
+        {
+            Destroy(Player);
+            Player = null;
+        }
+
         //Scene reload
         var currentScene = SceneManager.GetActiveScene().name;
         var operation = SceneManager.LoadSceneAsync(currentScene);
         operation.completed += (asyncOperation) =>
         {
+            // Find the player in the reloaded scene
+            Player = GameObject.FindGameObjectWithTag("Player");
+            if (Player == null)
+            {
+                Debug.LogError("[GAME_CONTROLLER] Player not found after scene reload!");
+                return;
+            }
+
             MovePlayerToDoor(_lastDoorIndex);
         };
     }
 
-    private static void MovePlayerToDoor(byte doorIndex, Vector3? spawnPosition = null)
+    private static void MovePlayerToDoor(byte doorIndex, Vector3? spawnPosition = null, Vector3? playerOffset = null)
     {
         var doorName = Door01NamePrefix + doorIndex.ToString("D2");
+        Debug.Log($"[GAME_CONTROLLER] Looking for door: {doorName}");
+        Debug.Log($"[GAME_CONTROLLER] Player current position BEFORE move: {Player.transform.position}");
+        Debug.Log($"[GAME_CONTROLLER] Received spawnPosition: {spawnPosition}");
+        Debug.Log($"[GAME_CONTROLLER] Received playerOffset: {playerOffset}");
+
         var door = GameObject.Find(doorName);
         if (door == null)
         {
@@ -89,22 +112,40 @@ public class GameController : MonoBehaviour
             return;
         }
 
+        Debug.Log($"[GAME_CONTROLLER] Found door at position: {door.transform.position}");
+        Debug.Log($"[GAME_CONTROLLER] Door GameObject name: {door.name}");
+
         // Spawn Position is the center of the scene transition prefab in the previous scene
-        // We calculate the offset from that position to the player position and apply the same offset to the door position
-        // to seamlessly position the player in the new scene
+        // playerOffset is the offset from that position to the player position, captured at the moment of transition
+        // We apply the same offset to the door position to seamlessly position the player in the new scene
         Vector3 targetPosition = door.transform.position;
         Quaternion targetRotation = Player.transform.rotation;
+
+        Debug.Log($"[GAME_CONTROLLER] Initial target position (door position): {targetPosition}");
+
         if (spawnPosition == null)
         {
+            Debug.Log($"[GAME_CONTROLLER] No spawn position provided, calculating rotation to center");
             Quaternion directionToCenter = Quaternion.LookRotation(Vector3.zero - door.transform.position);
             targetRotation = directionToCenter;
         }
+        else if (playerOffset.HasValue)
+        {
+            Debug.Log($"[GAME_CONTROLLER] Applying player offset: {playerOffset.Value}");
+            targetPosition += playerOffset.Value;
+            Debug.Log($"[GAME_CONTROLLER] Target position after offset: {targetPosition}");
+        }
         else
         {
-            Vector3 offset = Player.transform.position - spawnPosition.Value;
-            targetPosition += offset;
+            Debug.Log($"[GAME_CONTROLLER] Spawn position provided but no player offset");
         }
+
+        Debug.Log($"[GAME_CONTROLLER] Final target position: {targetPosition}");
+        Debug.Log($"[GAME_CONTROLLER] Final target rotation: {targetRotation.eulerAngles}");
+
         Player.transform.SetPositionAndRotation(targetPosition, targetRotation);
+
+        Debug.Log($"[GAME_CONTROLLER] Player position AFTER move: {Player.transform.position}");
     }
 
     public void SaveGameObjectStatus(string name, Transform transform, bool isActive)
