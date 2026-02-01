@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class GoingToMainMenuAfterCredits : MonoBehaviour
 {
     public AnimationClip creditsAnimator;
+    public AudioSource musicAudioSource;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -12,8 +13,9 @@ public class GoingToMainMenuAfterCredits : MonoBehaviour
         StartCoroutine(GoingToMainMenuAfterCreditsCoroutine());
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+        
         Destroy(player);
-        Destroy(GameController.Instance.gameObject);
+        //Destroy(GameController.Instance.gameObject);
     }
 
     IEnumerator GoingToMainMenuAfterCreditsCoroutine()
@@ -21,5 +23,7 @@ public class GoingToMainMenuAfterCredits : MonoBehaviour
         yield return new WaitForSeconds(creditsAnimator.length);
 
         SceneManager.LoadScene("MainMenu");
+
+        Destroy(GameController.Instance.gameObject);
     }
 }
