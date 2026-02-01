@@ -11,11 +11,8 @@ public class ChangeSceneCorridorTriggerDettection : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[TRIGGER] Player entered trigger at position: {other.transform.position}");
-        Debug.Log($"[TRIGGER] Trigger position: {transform.position}");
-        Debug.Log($"[TRIGGER] Trigger GameObject name: {gameObject.name}");
+        Debug.Log($"[TRIGGER] Player entered scene change trigger: {gameObject.name}");
 
-        changeSceneCorridorController.LoadNextLevel(transform.position);
+        changeSceneCorridorController.LoadNextLevel();
     }
-
 }
