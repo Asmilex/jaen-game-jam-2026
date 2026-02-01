@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
             case "Pause":
-                //_uiController.TogglePauseMenu();
+                _uiController.TogglePauseMenu();
                 break;
 
         }

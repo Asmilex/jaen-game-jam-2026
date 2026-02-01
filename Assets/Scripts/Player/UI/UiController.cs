@@ -1,6 +1,7 @@
 using System;
 using NetworkMask.Constants;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
@@ -120,16 +121,18 @@ public class UiController : MonoBehaviour
     public void ActivatePauseMenu(bool pauseMenuState)
     {
         pauseMenu.SetActive(pauseMenuState);
-        
+
         if (pauseMenuState == true)
         {
-             UnityEngine.Cursor.lockState = CursorLockMode.None;
-             UnityEngine.Cursor.visible = true;
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.visible = true;
+            playerController.TpEnd();
 
-        }else
+        } else
         {
-             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-             UnityEngine.Cursor.visible = false;
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            UnityEngine.Cursor.visible = false;
+            playerController.TpStart();
         }
     }
 
@@ -138,9 +141,15 @@ public class UiController : MonoBehaviour
         if(pauseMenu.activeInHierarchy == false)
         {
             pauseMenu.SetActive(true);
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.visible = true;
+            playerController.TpStart();
         }else
         {
             pauseMenu.SetActive(false);
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            UnityEngine.Cursor.visible = false;
+            playerController.TpEnd();
         }
     }
 
@@ -148,11 +157,20 @@ public class UiController : MonoBehaviour
     {
         pauseMenu.SetActive(false);
         ActivatePauseMenu(false);
+        playerController.TpEnd();
     }
 
     public void MouseSensitivitySlider()
     {
         playerController.cameraSensibility = cameraSensitivySlider.value;
+    }
+
+    public void GoToMainMenu()
+    {
+
+        Destroy(GameController.Instance.Player);
+        Destroy(GameController.Instance.gameObject);
+        SceneManager.LoadScene("MainMenu");
     }
 
 }
