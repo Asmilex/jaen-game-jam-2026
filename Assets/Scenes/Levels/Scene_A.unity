@@ -12415,7 +12415,7 @@ MonoBehaviour:
   - {fileID: 1787055965}
   - {fileID: 1274212364}
   - {fileID: 1274212363}
-  OnlyFromDoorIndex: 1
+  OnlyFromDoorIndex: 0
 --- !u!65 &878156447
 BoxCollider:
   m_ObjectHideFlags: 0
