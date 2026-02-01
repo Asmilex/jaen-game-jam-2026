@@ -447,4 +447,9 @@ public class PlayerController : MonoBehaviour
         _holdingObjectBody.interpolation = RigidbodyInterpolation.None;
         _holdingObject = null;
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        Debug.Log(collision.gameObject.name);
+    }
 }

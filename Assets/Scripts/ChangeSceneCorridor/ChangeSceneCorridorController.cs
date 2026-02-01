@@ -18,7 +18,6 @@ public class ChangeSceneCorridorController : MonoBehaviour
 
     [Header("Trigger Control")]
     [SerializeField] private GameObject changeSceneTrigger;
-    [SerializeField] private float timeToActivateTriggerAfterLoadingScene;
 
     private bool _allowedToLoadNextLevel = true;
 
@@ -78,12 +77,14 @@ public class ChangeSceneCorridorController : MonoBehaviour
 
 
     #region MISC
+    /*
     private IEnumerator EnableTriggerAfterAFewSecondsAfterLoadingScene()
     {
         changeSceneTrigger.SetActive(false);
         yield return new WaitForSeconds(timeToActivateTriggerAfterLoadingScene);
         changeSceneTrigger.SetActive(true);
     }
+    */
 
     /// <summary>
     /// Player start transform when he goes to another scene through corridor in case we want him to start in this corridor

@@ -11909,6 +11909,14 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 893077462}
+    - target: {fileID: 5552393825929154327, guid: e1634e805ddf9e44e9fec7f46a24d95d, type: 3}
+      propertyPath: TargetDoorIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5552393825929154327, guid: e1634e805ddf9e44e9fec7f46a24d95d, type: 3}
+      propertyPath: levelNameToLoadAfterPlayerEnter
+      value: Scene_A
+      objectReference: {fileID: 0}
     - target: {fileID: 7761836977285997787, guid: e1634e805ddf9e44e9fec7f46a24d95d, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -17369,6 +17377,14 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1528527027}
+    - target: {fileID: 5552393825929154327, guid: e1634e805ddf9e44e9fec7f46a24d95d, type: 3}
+      propertyPath: TargetDoorIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5552393825929154327, guid: e1634e805ddf9e44e9fec7f46a24d95d, type: 3}
+      propertyPath: levelNameToLoadAfterPlayerEnter
+      value: Scene_D
+      objectReference: {fileID: 0}
     - target: {fileID: 7761836977285997787, guid: e1634e805ddf9e44e9fec7f46a24d95d, type: 3}
       propertyPath: m_Mesh
       value: 
