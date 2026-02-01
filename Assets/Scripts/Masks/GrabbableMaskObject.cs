@@ -1,21 +1,12 @@
 using NetworkMask.Constants;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.AdaptivePerformance;
-using UnityEngine.UI;
 
 public class GrabbableMaskObject : MonoBehaviour
 {
     private PlayerController playerController;
 
     [Header("Mask type")]
-    [SerializeField] private GrabbableMaskColor maskColor;
-    enum GrabbableMaskColor
-    {
-        BlueMask,
-        RedMask,
-        YellowMask,
-    }
+    [SerializeField] private MaskColor maskColor;
 
     [Header("Prefab references")]
     [SerializeField] private MeshRenderer maskAnimMeshRenderer;
@@ -36,7 +27,7 @@ public class GrabbableMaskObject : MonoBehaviour
     void Start()
     {
         var playerController = GameController.Instance.Player.GetComponent<PlayerController>();
-        if (false) // TODO: playerController.HasMask(maskColor)
+        if (playerController.HasMask(maskColor))
         {
             Destroy(gameObject);
             return;
@@ -48,19 +39,19 @@ public class GrabbableMaskObject : MonoBehaviour
     {
         switch (maskColor)
         {
-            case GrabbableMaskColor.BlueMask:
+            case MaskColor.Blue:
                 maskAnimMeshRenderer.material = BlueMaterial;
                 maskPointLight.color = maskPointLightColorBlue;
                 var mainModuleBlue = maskParticleSystem.main;
                 mainModuleBlue.startColor = maskPointLightColorBlue;
                 break;
-            case GrabbableMaskColor.RedMask:
+            case MaskColor.Red:
                 maskAnimMeshRenderer.material = RedMaterial;
                 maskPointLight.color = maskPointLightColorRed;
                 var mainModuleRed = maskParticleSystem.main;
                 mainModuleRed.startColor = maskPointLightColorRed;
                 break;
-            case GrabbableMaskColor.YellowMask:
+            case MaskColor.Yellow:
                 maskAnimMeshRenderer.material = YellowMaterial;
                 maskPointLight.color = maskPointLightColorYellow;
                 var mainModuleYellow = maskParticleSystem.main;
@@ -82,15 +73,15 @@ public class GrabbableMaskObject : MonoBehaviour
         //Call player with color mask
         switch (maskColor)
         {
-            case GrabbableMaskColor.BlueMask:
+            case MaskColor.Blue:
                 playerController.EnablePlayerMask(MaskColor.Blue);
                 StartCoroutine(playerController.ChangeMask(MaskColor.Blue));
                 break;
-            case GrabbableMaskColor.RedMask:
+            case MaskColor.Red:
                 playerController.EnablePlayerMask(MaskColor.Red);
                 StartCoroutine(playerController.ChangeMask(MaskColor.Red));
                 break;
-            case GrabbableMaskColor.YellowMask:
+            case MaskColor.Yellow:
                 playerController.EnablePlayerMask(MaskColor.Yellow);
                 StartCoroutine(playerController.ChangeMask(MaskColor.Yellow));
                 break;
