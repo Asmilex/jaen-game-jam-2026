@@ -7,7 +7,7 @@ namespace NetworkMask.Mask
 {
     [RequireComponent(typeof(MeshRenderer))]
     [RequireComponent(typeof(Collider))]
-    public abstract class ColoredObject: MonoBehaviour
+    public abstract class ColoredObject : MonoBehaviour
     {
         public abstract MaskColor MaskColor { get; }
         private MeshRenderer _renderer;
@@ -28,6 +28,8 @@ namespace NetworkMask.Mask
             {
                 collider.includeLayers = mask;
             }
+
+            OnColorChange(this.gameObject, new MaskChangeEventArgs { NewColor = GameController.CurrentMaskColor });
         }
 
         void OnColorChange(GameObject sender, MaskChangeEventArgs args)
