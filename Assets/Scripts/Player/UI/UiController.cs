@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UiController : MonoBehaviour
 {
+    public GameObject interactUI;
     public GameObject redMask;
     public GameObject redMaskNotSelected;
     public GameObject blueMask;
@@ -20,6 +21,9 @@ public class UiController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Debug.Log("UI Started");
+        if (interactUI == null) throw new NullReferenceException("Interact UI Missing");
+        interactUI.SetActive(false);
         if (redMask == null) throw new NullReferenceException("RedMask UI Missing");
         redMask.SetActive(false);
         if (blueMask == null) throw new NullReferenceException("BlueMask UI Missing");
@@ -69,6 +73,24 @@ public class UiController : MonoBehaviour
                 yellowMaskNotSelected.SetActive(true);
                 break;
         }
+    }
+
+    public void InteractableOnSight()
+    {
+        // try
+        // {
+        interactUI.SetActive(true);
+        // }
+        // catch { }
+    }
+
+    public void NoInteractableOnSight()
+    {
+        try
+        {
+            interactUI.SetActive(false);
+        }
+        catch { }
     }
 
     public void MaskDisabled(MaskColor maskColor)
