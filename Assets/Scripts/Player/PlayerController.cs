@@ -89,6 +89,7 @@ public class PlayerController : MonoBehaviour
         _holdingObject = null;
         _realMaxSpeed = maxSpeed * sprintFactor;
         _audioSource = GetComponent<AudioSource>();
+        _playerYaw = _playerPosition.localEulerAngles.y;
         if (_inputs == null) throw new NullReferenceException("No player input found");
         if (playerCamera == null) throw new NullReferenceException("No player camera found");
         if (grabReference == null) throw new NullReferenceException("No grab reference found");
@@ -261,7 +262,7 @@ public class PlayerController : MonoBehaviour
         //Si el player está grounded, el contador se suma
         if (_coyoteGrounded)
         {
-            //Distancia que recorrido el jugador 
+            //Distancia que recorrido el jugador
             stepDistanceCounter += new Vector3(_currentSpeed.x, 0f, _currentSpeed.z).magnitude * Time.deltaTime;
         }
         //Si la distancia recorrida es igual o superior a la distancia de una zancada, reseteamos el contador
