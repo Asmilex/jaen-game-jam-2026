@@ -242,8 +242,15 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Music by: \nSergei Chetvertnykh (SergeQuadrado)\nGame font: \nSilver by
-    Poppyworks"
+  m_text: 'Sounds:
+
+    Sergei Chetvertnykh (SergeQuadrado)
+
+
+    Font:
+
+    Silver
+    by Poppy Works'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a2fe8de39c0e228419b81167506bd30c, type: 2}
   m_sharedMaterial: {fileID: 4395609464598650774, guid: a2fe8de39c0e228419b81167506bd30c, type: 2}
