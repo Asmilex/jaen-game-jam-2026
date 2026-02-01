@@ -14971,8 +14971,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 34.707382, y: 15.039767, z: 11.584598}
-  m_Center: {x: -27.901896, y: 5.827109, z: -4.238}
+  m_Size: {x: 4.666127, y: 15.039767, z: 11.584598}
+  m_Center: {x: -28.659039, y: 5.827109, z: -4.238}
 --- !u!43 &1421717966
 Mesh:
   m_ObjectHideFlags: 0
@@ -16089,6 +16089,10 @@ PrefabInstance:
       propertyPath: TargetObject
       value: 
       objectReference: {fileID: 1149674040}
+    - target: {fileID: 1486377436905162038, guid: ca062eb9a4bf9bbc287bea7f1a128c66, type: 3}
+      propertyPath: PlayerCanActivate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1758445819862879478, guid: ca062eb9a4bf9bbc287bea7f1a128c66, type: 3}
       propertyPath: m_Layer
       value: 6
