@@ -1,9 +1,12 @@
 using System;
 using NetworkMask.Constants;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class UiController : MonoBehaviour
 {
+    public PlayerController playerController;
     public GameObject interactUI;
     public GameObject redMask;
     public GameObject redMaskNotSelected;
@@ -11,6 +14,9 @@ public class UiController : MonoBehaviour
     public GameObject blueMaskNotSelected;
     public GameObject yellowMask;
     public GameObject yellowMaskNotSelected;
+    public GameObject pauseMenu;
+    public UnityEngine.UI.Slider cameraSensitivySlider;
+
     private MaskColor _currentMask;
 
     public UiController()
@@ -21,6 +27,8 @@ public class UiController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        playerController = this.gameObject.GetComponent<PlayerController>();
+
         Debug.Log("UI Started");
         if (interactUI == null) throw new NullReferenceException("Interact UI Missing");
         interactUI.SetActive(false);
@@ -107,6 +115,44 @@ public class UiController : MonoBehaviour
                 yellowMask.SetActive(false);
                 break;
         }
+    }
+
+    public void ActivatePauseMenu(bool pauseMenuState)
+    {
+        pauseMenu.SetActive(pauseMenuState);
+        
+        if (pauseMenuState == true)
+        {
+             UnityEngine.Cursor.lockState = CursorLockMode.None;
+             UnityEngine.Cursor.visible = true;
+
+        }else
+        {
+             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+             UnityEngine.Cursor.visible = false;
+        }
+    }
+
+    public void TogglePauseMenu()
+    {
+        if(pauseMenu.activeInHierarchy == false)
+        {
+            pauseMenu.SetActive(true);
+        }else
+        {
+            pauseMenu.SetActive(false);
+        }
+    }
+
+    public void ContinueButtonPauseMenu()
+    {
+        pauseMenu.SetActive(false);
+        ActivatePauseMenu(false);
+    }
+
+    public void MouseSensitivitySlider()
+    {
+        playerController.cameraSensibility = cameraSensitivySlider.value;
     }
 
 }

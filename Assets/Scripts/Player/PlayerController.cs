@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpHeight = 1.6f;
     [SerializeField] float deceleration = 35f;
     [SerializeField] float sprintFactor = 2f;
-    [SerializeField] float cameraSensibility = 100f;
+    [SerializeField] public float cameraSensibility = 100f;
     [SerializeField] int coyoteMiliseconds = 100;
     [SerializeField] float interactionDistance = 3f;
     [SerializeField] float normalFOV = 75f;
@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         // Confines the cursor
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
 
         // Initialize FOV
         playerCamera.fieldOfView = normalFOV;
@@ -193,6 +193,10 @@ public class PlayerController : MonoBehaviour
                     StartCoroutine(ChangeMask(MaskColor.Yellow));
                 }
                 break;
+            case "Pause":
+                //_uiController.TogglePauseMenu();
+                break;
+
         }
     }
 
