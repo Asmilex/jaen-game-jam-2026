@@ -1248,15 +1248,15 @@ PrefabInstance:
       objectReference: {fileID: 459984576}
     - target: {fileID: 1118544717686723267, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.5
+      value: 10.5
       objectReference: {fileID: 0}
     - target: {fileID: 1118544717686723267, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.317
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1118544717686723267, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 32.550728
+      value: 32.5
       objectReference: {fileID: 0}
     - target: {fileID: 1118544717686723267, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9524,7 +9524,7 @@ PrefabInstance:
     - target: {fileID: 4449080725931315616, guid: 2e48b003d8bfa4202a7963a42367ecc6, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1904935706}
+      objectReference: {fileID: 777124180}
     - target: {fileID: 4449080725931315616, guid: 2e48b003d8bfa4202a7963a42367ecc6, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -12245,7 +12245,7 @@ MonoBehaviour:
   - {fileID: 1787055965}
   - {fileID: 1274212364}
   - {fileID: 1274212363}
-  OnlyFromDoorIndex: 0
+  OnlyFromDoorIndex: 1
 --- !u!65 &878156447
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14264,7 +14264,7 @@ PrefabInstance:
       objectReference: {fileID: 1746636550}
     - target: {fileID: 399380620260128573, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 586705183394221368, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_Mesh
@@ -14364,7 +14364,7 @@ PrefabInstance:
       objectReference: {fileID: 111680948}
     - target: {fileID: 6968130138530157356, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7250904037313500875, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_Mesh
@@ -14372,7 +14372,7 @@ PrefabInstance:
       objectReference: {fileID: 1421717966}
     - target: {fileID: 7570239818401328334, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7613546965845803858, guid: 6a968d544249d487f903c34dfdd9288f, type: 3}
       propertyPath: m_Mesh
@@ -14660,7 +14660,7 @@ MonoBehaviour:
   - {fileID: 1943408180}
   - {fileID: 1492029764}
   - {fileID: 1068556631}
-  OnlyFromDoorIndex: 0
+  OnlyFromDoorIndex: 2
 --- !u!65 &1374163000
 BoxCollider:
   m_ObjectHideFlags: 0
