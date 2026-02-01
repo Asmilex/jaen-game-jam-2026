@@ -14,6 +14,8 @@ public record GameObjectStatus
     public bool IsActive;
 }
 
+[RequireComponent(typeof(AudioSource))]
+
 public class GameController : MonoBehaviour
 {
     private const string Door01NamePrefix = "Door_";
