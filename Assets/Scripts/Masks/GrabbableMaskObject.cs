@@ -35,6 +35,12 @@ public class GrabbableMaskObject : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        var playerController = GameController.Instance.Player.GetComponent<PlayerController>();
+        if (false) // TODO: playerController.HasMask(maskColor)
+        {
+            Destroy(gameObject);
+            return;
+        }
         SetGrabbableMaskState();
     }
 
