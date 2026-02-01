@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Threading;
 using NetworkMask.Constants;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(UiController))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,6 +30,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float minGrabingDistance = 3f;
     public Camera playerCamera;
     public GameObject grabReference;
+    UiController _uiController;
 
     //Distancia que deberá recorrer el jugador para que suene un sonido de pisada
     public float stepDistance = 1f;
@@ -78,7 +81,6 @@ public class PlayerController : MonoBehaviour
     bool _wasSprintingBeforeJumping = false;
     bool _tpPreparing = false;
 
-
     void Initialize()
     {
         _inputs = GetComponent<PlayerInput>();
@@ -93,6 +95,8 @@ public class PlayerController : MonoBehaviour
         if (_inputs == null) throw new NullReferenceException("No player input found");
         if (playerCamera == null) throw new NullReferenceException("No player camera found");
         if (grabReference == null) throw new NullReferenceException("No grab reference found");
+        _uiController = GetComponent<UiController>();
+        if (_uiController == null) throw new NullReferenceException("No uiController found");
         _maskAnimation = playerCamera.GetComponentInChildren<ChangeMaskAnimationController>();
         if (_maskAnimation == null) throw new NullReferenceException("Animation not foud");
         StartCoroutine(ChangeMask(MaskColor.None));
@@ -309,6 +313,7 @@ public class PlayerController : MonoBehaviour
                 _masksEnabled[2] = true;
                 break;
         }
+        _uiController.MaskEnabled(mask);
         _audioSource.PlayOneShot(newMaskSound);
     }
 
@@ -326,6 +331,7 @@ public class PlayerController : MonoBehaviour
                 _masksEnabled[2] = false;
                 break;
         }
+        _uiController.MaskDisabled(mask);
     }
 
     public IEnumerator ChangeMask(MaskColor mask)
@@ -341,7 +347,7 @@ public class PlayerController : MonoBehaviour
         }
         _currentMask = mask;
         _changeOnGoing = false;
-
+        _uiController.ChangeMaskUI(_currentMask);
         switch (mask)
         {
             case MaskColor.None:
