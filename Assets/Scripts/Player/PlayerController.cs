@@ -65,6 +65,9 @@ public class PlayerController : MonoBehaviour
 
     MaskColor _currentMask;
     bool[] _masksEnabled;
+    public bool HasRedMask => _masksEnabled[1];
+    public bool HasBlueMask => _masksEnabled[0];
+    public bool HasYellowMask => _masksEnabled[2];
     LayerMask _currentLayer;
 
     GameObject _holdingObject;
@@ -202,6 +205,7 @@ public class PlayerController : MonoBehaviour
             PlayerMovement();
             CameraMovement();
             UpdateFOV();
+            InteractableOnSight();
             Grabing();
         }
     }
@@ -292,8 +296,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateFOV()
     {
-
-        _targetFOV = (_sprinting && _coyoteGrounded) ? sprintFOV : normalFOV;
+        _targetFOV = (_currentSpeed.magnitude > maxSpeed) ? sprintFOV : normalFOV;
         playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, _targetFOV, fovTransitionSpeed * Time.deltaTime);
     }
 
@@ -474,5 +477,40 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         Debug.Log(collision.gameObject.name);
+    }
+
+    private void InteractableOnSight()
+    {
+        RaycastHit hitted;
+        bool collided = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hitted, interactionDistance, _currentLayer, QueryTriggerInteraction.Ignore);
+        if (collided)
+        {
+            try
+            {
+                var interactable = hitted.collider.gameObject.GetComponent<Interactable>();
+                if (interactable)
+                {
+                    _uiController.InteractableOnSight();
+                    return;
+                }
+            }
+            catch { }
+        }
+        _uiController.NoInteractableOnSight();
+    }
+
+    public bool HasMask(MaskColor mask)
+    {
+        switch (mask)
+        {
+            case MaskColor.Red:
+                return _masksEnabled[1];
+            case MaskColor.Blue:
+                return _masksEnabled[0];
+            case MaskColor.Yellow:
+                return _masksEnabled[2];
+            default:
+                return false;
+        }
     }
 }
