@@ -24,4 +24,9 @@ public class MainCameraMaskController : MonoBehaviour
             _ => BaseLayer.BasePlayerLayer,
         };
     }
+
+    void OnDestroy()
+    {
+        GameController.OnMaskChange -= OnMaskChange;
+    }
 }
