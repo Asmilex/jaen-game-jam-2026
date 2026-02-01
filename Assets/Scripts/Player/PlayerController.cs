@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
     ChangeMaskAnimationController _maskAnimation;
     bool _changeOnGoing = false;
     bool _wasSprintingBeforeJumping = false;
+    bool _tpPreparing = false;
 
 
     void Initialize()
@@ -124,6 +125,17 @@ public class PlayerController : MonoBehaviour
     {
         // unsubscribe to avoid memory leaks
         _inputs.onActionTriggered -= HandleInput;
+    }
+
+    public void TpStart()
+    {
+        _tpPreparing = true;
+        DropObject();
+    }
+
+    public void TpEnd()
+    {
+        _tpPreparing = false;
     }
 
     private void HandleInput(InputAction.CallbackContext context)
@@ -180,10 +192,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlayerMovement();
-        CameraMovement();
-        UpdateFOV();
-        Grabing();
+        if (!_tpPreparing)
+        {
+            PlayerMovement();
+            CameraMovement();
+            UpdateFOV();
+            Grabing();
+        }
     }
 
     private void PlayerMovement()
@@ -440,6 +455,7 @@ public class PlayerController : MonoBehaviour
     }
     private void DropObject()
     {
+        if (_holdingObject == null) return;
         _holdingObjectBody.useGravity = true;
         _holdingObjectBody.freezeRotation = false;
         _holdingObjectCollider.enabled = true;
