@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
     ChangeMaskAnimationController _maskAnimation;
     bool _changeOnGoing = false;
     bool _wasSprintingBeforeJumping = false;
+    bool _tpPreparing = false;
 
 
     void Initialize()
@@ -88,6 +89,7 @@ public class PlayerController : MonoBehaviour
         _holdingObject = null;
         _realMaxSpeed = maxSpeed * sprintFactor;
         _audioSource = GetComponent<AudioSource>();
+        _playerYaw = _playerPosition.localEulerAngles.y;
         if (_inputs == null) throw new NullReferenceException("No player input found");
         if (playerCamera == null) throw new NullReferenceException("No player camera found");
         if (grabReference == null) throw new NullReferenceException("No grab reference found");
@@ -124,6 +126,17 @@ public class PlayerController : MonoBehaviour
     {
         // unsubscribe to avoid memory leaks
         _inputs.onActionTriggered -= HandleInput;
+    }
+
+    public void TpStart()
+    {
+        _tpPreparing = true;
+        DropObject();
+    }
+
+    public void TpEnd()
+    {
+        _tpPreparing = false;
     }
 
     private void HandleInput(InputAction.CallbackContext context)
@@ -180,10 +193,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlayerMovement();
-        CameraMovement();
-        UpdateFOV();
-        Grabing();
+        if (!_tpPreparing)
+        {
+            PlayerMovement();
+            CameraMovement();
+            UpdateFOV();
+            Grabing();
+        }
     }
 
     private void PlayerMovement()
@@ -246,7 +262,7 @@ public class PlayerController : MonoBehaviour
         //Si el player está grounded, el contador se suma
         if (_coyoteGrounded)
         {
-            //Distancia que recorrido el jugador 
+            //Distancia que recorrido el jugador
             stepDistanceCounter += new Vector3(_currentSpeed.x, 0f, _currentSpeed.z).magnitude * Time.deltaTime;
         }
         //Si la distancia recorrida es igual o superior a la distancia de una zancada, reseteamos el contador
@@ -440,6 +456,7 @@ public class PlayerController : MonoBehaviour
     }
     private void DropObject()
     {
+        if (_holdingObject == null) return;
         _holdingObjectBody.useGravity = true;
         _holdingObjectBody.freezeRotation = false;
         _holdingObjectCollider.enabled = true;
