@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
     public AudioClip jumpSound;
     public AudioClip changeMaskSound;
     public AudioClip newMaskSound;
+    public AudioClip grabSound;
+    public AudioClip dropSound;
     //Para comprobar si se encontrba tocando el suelo en el ciclo anterior
     private bool _previouslyGrounded = true;
     //Referencia al audiosource
@@ -411,6 +413,7 @@ public class PlayerController : MonoBehaviour
         _holdingObjectBody.interpolation = RigidbodyInterpolation.Interpolate;
         _holdingObjectCollider = interactableObject.rigidbody.gameObject.GetComponent<Collider>();
         _holdingObjectCollider.enabled = false;
+        _audioSource.PlayOneShot(grabSound);
     }
 
     private void Grabing()
@@ -477,6 +480,7 @@ public class PlayerController : MonoBehaviour
         _holdingObjectBody.isKinematic = false;
         _holdingObjectBody.interpolation = RigidbodyInterpolation.None;
         _holdingObject = null;
+        _audioSource.PlayOneShot(dropSound);
     }
 
     private void OnCollisionStay(Collision collision)

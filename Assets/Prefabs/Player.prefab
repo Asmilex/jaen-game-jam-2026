@@ -839,6 +839,8 @@ MonoBehaviour:
   jumpSound: {fileID: 8300000, guid: 03db8f6986e7540dabba10981eaf5aed, type: 3}
   changeMaskSound: {fileID: 8300000, guid: a35d6c604239543f690ea2f1c166d2b3, type: 3}
   newMaskSound: {fileID: 8300000, guid: a00b630b90a594e7880cf36e7384b056, type: 3}
+  grabSound: {fileID: 8300000, guid: 030311ef88e3d49989fdd5ca74bb49ad, type: 3}
+  dropSound: {fileID: 8300000, guid: 8d0819320058148509ce3c68321a404a, type: 3}
 --- !u!82 &2256393829892122894
 AudioSource:
   m_ObjectHideFlags: 0
