@@ -259,7 +259,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294951680
+    rgba: 4278253311
   m_fontColor: {r: 1, g: 0.9647059, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2865,6 +2865,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoingToMainMenuAfterCredits
   creditsAnimator: {fileID: 7400000, guid: 0282c264e2074774e8258acc87d0756a, type: 2}
+  musicAudioSource: {fileID: 0}
 --- !u!1 &1987568606
 GameObject:
   m_ObjectHideFlags: 0
